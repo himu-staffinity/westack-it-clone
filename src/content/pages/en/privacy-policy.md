@@ -1,17 +1,17 @@
 ---
 title: Privacy policy
 lang: en
-
 ---
-
-This privacy policy contains detailed information about what happens to your personal data when you visit our website www.kadalian.com. Personal data is any data with which you can personally identify yourself. We strictly adhere to the legal provisions when processing your data, in particular the General Data Protection Regulation ("GDPR"), and attach great importance to ensuring that your visit to our website is absolutely secure.
+This privacy policy contains detailed information about what happens to your personal data when you visit our website www.kadalian.com. Personal data is any data with which you can personally identify yourself. We strictly adhere to the legal provisions when processing your data, in particular the General Data Protection Regulation ("GDPR"), and attach great importance to ensuring that your visit to our website is absolutely secure.\
+\
+This is an english only text
 
 ## Responsible entity
 
-Responsible under data protection law for the collection and processing of personal data on this website is:  
-Name: WeStack Information Technologies GmbH  
-Address: Leonhardstraße 20A  90443, Nürnberg (Germany)  
-E-Mail: info@westack-it.eu  
+Responsible under data protection law for the collection and processing of personal data on this website is:\
+Name: WeStack Information Technologies GmbH\
+Address: Leonhardstraße 20A  90443, Nürnberg (Germany)\
+E-Mail: info@westack-it.eu\
 Phone: +49 163 1944 738
 
 ## Cookies
@@ -83,7 +83,7 @@ b) for compliance with a legal obligation which requires processing under Union 
 c) for reasons of public interest in the area of public health pursuant to Art. 9(2)(h) and (i) and Art. 9(3) DSGVO.
 
 d) for archiving purposes in the public interest, scientific or historical research purposes or for statistical purposes pursuant to Art. 89 (1) DSGVO, insofar as the data subject right is likely to render impossible or seriously prejudice the achievement of the purposes of such processing, or for the establishment, exercise or defense of legal claims. 
- 
+
 If we have made your personal data public and we are obliged to erase it in accordance with the above, we shall take reasonable steps, including technical measures, to inform data controllers processing the personal data that you, as the data subject, have requested that they erase all links to your personal data or copies or replications of such personal data, taking into account the available technology and the cost of implementation.
 
 ### 2.5 Right to restriction of processing

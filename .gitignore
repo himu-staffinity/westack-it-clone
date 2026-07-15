@@ -24,3 +24,6 @@ pnpm-debug.log*
 .idea/
 
 .wrangler
+*.vars
+
+public/admin/config.dev.yml

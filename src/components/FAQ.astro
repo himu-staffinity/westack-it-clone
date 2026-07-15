@@ -1,0 +1,87 @@
+---
+export interface FAQItem {
+  name: string;
+  acceptedAnswer: string;
+}
+
+export interface FAQProps {
+  items: FAQItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="faq" itemscope itemtype="https://schema.org/FAQPage">
+  <h3>FAQ</h3>
+  <ul>
+    {items.map((item: FAQItem, index: number) => (
+      <li
+        class={`faq-item ${index === 0 ? "open" : ""}`}
+        itemscope
+        itemprop="mainEntity"
+        itemtype="https://schema.org/Question"
+      >
+        <button
+          class="faq-question"
+          type="button"
+          aria-expanded={index === 0 ? "true" : "false"}
+          aria-controls={`faq-answer-${index}`}
+          itemprop="name"
+        >
+          {item.name}
+        </button>
+        <div
+          class="faq-answer"
+          id={`faq-answer-${index}`}
+          itemscope
+          itemprop="acceptedAnswer"
+          itemtype="https://schema.org/Answer"
+        >
+          <p itemprop="text">{item.acceptedAnswer}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<script>
+if (typeof window !== "undefined") {
+  document.addEventListener("DOMContentLoaded", () => {
+    const faqItems = document.querySelectorAll(".faq-item");
+    
+    faqItems.forEach((item, index) => {
+    const button = item.querySelector<HTMLButtonElement>(".faq-question");
+    const answer = item.querySelector<HTMLDivElement>(".faq-answer");
+
+    if (!button || !answer) return;
+
+    if (item.classList.contains("open")) {
+      answer.style.maxHeight = answer.scrollHeight + "px";
+    }
+
+    button.addEventListener("click", () => {
+      const isOpen = item.classList.contains("open");
+
+      if (isOpen) {
+        answer.style.maxHeight = "0";
+        item.classList.remove("open");
+        button.setAttribute("aria-expanded", "false");
+      } else {
+        faqItems.forEach((other) => {
+          const otherAnswer = other.querySelector<HTMLDivElement>(".faq-answer");
+          const otherButton = other.querySelector<HTMLButtonElement>(".faq-question");
+          if (otherAnswer) otherAnswer.style.maxHeight = "0";
+          other.classList.remove("open");
+          if (otherButton) otherButton.setAttribute("aria-expanded", "false");
+        });
+
+        answer.style.maxHeight = answer.scrollHeight + "px";
+        item.classList.add("open");
+        button.setAttribute("aria-expanded", "true");
+      }
+    });
+  });
+
+  });
+}
+</script>

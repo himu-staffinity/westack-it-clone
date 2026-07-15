@@ -1,0 +1,98 @@
+{
+    "nav": {
+        "home": "Home",
+        "products": "Products",
+        "contact": "Contact",
+        "about": "What we stand for"
+    },
+    "hero": {
+        "title": [
+            "A new,",
+            "intuitive,",
+            "European",
+            "cloud provider."
+        ]
+    },
+    "interest": {
+        "title": [
+            "What do we ",
+            "offer?"
+        ],
+        "description": [
+            "A new cloud ",
+            "with the central goal ",
+            "of greatly simplifying the lives of developers, administrators, and SMEs. ",
+            "And all of this, completely independent here in Germany."
+        ]
+    },
+    "desire": {
+        "title": [
+            "What sets ",
+            "us apart"
+        ],
+        "hosted": {
+            "title": "Hosted in Germany",
+            "description": "With the highest quality standards and professionally administered."
+        },
+        "infrastructure": {
+            "title": "Own Infrastructure",
+            "description": "We are not an AWS wrapper but offer a full stack sovereign solution"
+        },
+        "gdpr": {
+            "title": "GDPR Compliant",
+            "description": "We maintain the highest data protection and security standards according to law."
+        }
+    },
+    "demo": {
+        "request": "Request Demo",
+        "contact": "Contact us",
+        "email": {
+            "placeholder": "Enter email address"
+        },
+        "submit": "Submit",
+        "error": {
+            "email": "Please enter a valid email address.",
+            "server": "An error occurred while submitting your request. Please try again."
+        },
+        "thankyou": "Thank you! We will contact you shortly.",
+        "contactForm": {
+            "title": "Contact Request",
+            "description": "General Contact Request"
+        },
+        "context":[
+                "Enter your email to request a demo.",
+                "We'll only use your email to contact you with details about the demo."
+        ],
+        "approval":"By submitting, you agree to our "
+    },
+    "site": {
+        "title": "WeStack",
+        "description": "A new, intuitive, European cloud provider.",
+        "author": "WeStack"
+    },
+    "products": {
+        "title": "Our Products",
+        "more": {
+            "title": "More Coming Soon",
+            "description": "We are constantly expanding our product portfolio."
+        },
+        "price_offer": "from",
+        "price_period": "per month"
+    },
+    "common": {
+        "loading": "Loading...",
+        "error": "Error"
+    },
+    "footer": {
+        "contact": "Contact",
+        "phone": "Phone",
+        "email": "Email",
+        "imprint": "Imprint",
+        "company_address": [
+            "Leonhard Street 20A ",
+            "90443 Nuremberg ",
+            "Ust.Id.: DE365370888"
+        ],
+        "privacy": "Privacy Policy"
+    }
+}

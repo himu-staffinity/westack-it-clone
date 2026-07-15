@@ -1,0 +1,84 @@
+---
+import { Image } from "astro:assets";
+import footerBg from "../assets/images/backgrounds/footer.webp";
+import { COMPANY_NAME } from "../config";
+import { authors } from "../data/authors.js";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import MultiLineText from "./i18n/MultiLineText.astro";
+import { getLocalizedPath } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Get company address as array
+const companyAddress = t("footer.company_address");
+---
+
+<footer>
+  <section id="footer">
+    <Image
+      src={footerBg}
+      alt="Desire Background"
+      class="background-image"
+      format="avif"
+      widths={[700, 1100, 1366, 1650]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      height={1173}
+      width={1366}
+    />
+    <div class="inner">
+      <h2 class="interest-title">{t("footer.contact")}</h2>
+      <div class="grid3">
+        <div class="grid2 two-thirds">
+          {
+            authors.map((author) => (
+              <div class="author-card">
+                <Image
+                  src={author.image}
+                  alt={author.name}
+                  widths={[64, 128, 180]}
+                  sizes="(max-width: 600px) 64px, (max-width: 1200px) 128px, 180px"
+                  height={180}
+                  width={180}
+                  format="webp"
+                  class="avatar"
+                />
+                <h2 class="footer-title">{author.name}</h2>
+                <p>{author.title}</p>
+                <p>{author.role}</p>
+                <p>
+                  <a href={`mailto:${author.email}`}>{author.email}</a>
+                </p>
+              </div>
+            ))
+          }
+        </div>
+        <div class="footer-details">
+          <div>
+            <h2 class="footer-title">{t("footer.phone")}</h2>
+            <p><a href="tel:+4991174393000">+4991174393000</a></p>
+          </div>
+          <div>
+            <h2 class="footer-title">{t("footer.email")}</h2>
+            <p><a href="mailto:info@westack-it.eu">info@westack-it.eu</a></p>
+          </div>
+          <div>
+            <h2 class="footer-title">{t("footer.imprint")}</h2>
+            <p>{COMPANY_NAME}</p>
+            <MultiLineText lines={companyAddress} tag="p" class="company-address" />
+          </div>
+          <div>
+            <h2 class="footer-title">
+              <a href={lang === 'de' ? '/privacy-policy/' : '/en/privacy-policy/'}>
+                {t("footer.privacy")}
+              </a>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</footer>

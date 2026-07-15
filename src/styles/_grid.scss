@@ -1,0 +1,48 @@
+@use "breakpoints";
+@use "variables";
+
+.grid3 {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 1rem 0;
+
+    .two-thirds {
+        grid-column: span 2;
+    }
+
+    @include breakpoints.tablet-or-smaller {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.grid2 {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+    margin: 1rem 0;
+}
+
+@include breakpoints.mobile {
+
+    .grid2{
+        grid-template-columns: 340px; 
+           
+    }
+    .grid3{
+        grid-template-columns: 350px; 
+        grid-auto-rows: 225px; 
+        justify-content: center;   
+
+        h2{
+            font-size: 18px;
+        }
+        p{
+            font-size: 16px;
+        }
+        .svg-images{
+            height: 50px;
+            width: 50px;
+        }
+    }
+}

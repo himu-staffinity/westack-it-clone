@@ -1,0 +1,26 @@
+---
+import { getCollection } from "astro:content";
+import ProductPage from "../../components/ProductPage.astro";
+
+// This function tells Astro which slugs to generate at build time
+export async function getStaticPaths() {
+    // Get German products only (since this is the German route)
+    const germanProducts = await getCollection(
+        "products",
+        ({ data }) => data.lang === "de",
+    );
+
+    return germanProducts.map((product) => {
+        // Extract the base slug (remove language directory if present)
+        const baseSlug = product.slug.includes("/")
+            ? product.slug.split("/")[1]
+            : product.slug;
+
+        return {
+            params: { slug: baseSlug },
+        };
+    });
+}
+---
+
+<ProductPage />

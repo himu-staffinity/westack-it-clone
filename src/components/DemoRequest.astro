@@ -1,0 +1,126 @@
+---
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const { product, buttonTitle } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const defaultButtonTitle = buttonTitle || t("demo.request");
+
+const context = t("demo.context") as string[];
+
+const siteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
+---
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<div id="demo-request" data-product={JSON.stringify(product)}>
+    <button id="show-demo-form" class="button">{defaultButtonTitle}</button>
+    
+    <form id="demo-form" style="display:none;">
+        <div class="context">
+            {context.map((line: string) => (
+                <p>{line}</p>
+            ))}
+        </div>
+        <div class="email">
+            <input
+                type="email"
+                id="demo-email"
+                placeholder={t("demo.email.placeholder")}
+                required
+            />
+        
+        <div class="recaptcha-container">
+            <div class="g-recaptcha" data-sitekey={siteKey}></div>
+        </div>
+                
+
+            <button type="submit" class="button">{t("demo.submit")}</button>
+        </div>
+        <div class="approval">
+            <p>{t("demo.approval")}<a href={`/${lang}/privacy-policy/`}>{t("footer.privacy")}</a></p>
+        </div>
+    </form>
+
+    <div id="demo-error" class="demo-error">{t("demo.error.email")}</div>
+    <div id="demo-server-error" class="demo-error" style="display:none;">{t("demo.error.server")}</div>
+    <div id="demo-thankyou" style="display:none;">{t("demo.thankyou")}</div>
+</div>
+
+<script>
+    const showBtn = document.getElementById("show-demo-form");
+    const form = document.getElementById("demo-form") as HTMLFormElement;
+    const thankyou = document.getElementById("demo-thankyou");
+    const errorMsg = document.getElementById("demo-error");
+    const serverErrorMsg = document.getElementById("demo-server-error");
+    const emailInput = document.getElementById("demo-email") as HTMLInputElement;
+    const demoRequestDiv = document.getElementById("demo-request");
+
+    let productData = {};
+    if (demoRequestDiv) {
+        try {
+            productData = JSON.parse(demoRequestDiv.getAttribute("data-product") ?? "");
+        } catch {}
+    }
+
+    if (showBtn && form && thankyou && errorMsg && serverErrorMsg && emailInput) {
+        showBtn.addEventListener("click", () => {
+            form.style.display = "";
+            showBtn.style.display = "none";
+        });
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            
+            const captchaResponse = (window as any).grecaptcha.getResponse();
+            
+            if (!captchaResponse) {
+                alert("Please verify that you are not a robot.");
+                return;
+            }
+
+            const email = emailInput.value.trim();
+
+            if (!/^\S+@\S+\.\S+$/.test(email)) {
+                errorMsg.classList.add("show");
+                return;
+            } else {
+                errorMsg.classList.remove("show");
+            }
+
+            serverErrorMsg.style.display = "none";
+
+            try {
+                const res = await fetch("/request-demo", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        email,
+                        product: productData,
+                        recaptchaToken: captchaResponse,
+                    }),
+                });
+
+            const data = await res.json();
+
+            if (data.success) {
+                form.style.display = "none";
+                thankyou.style.display = "";
+            } else {
+                serverErrorMsg.style.display = "";
+                (window as any).grecaptcha.reset();
+            }
+            } catch (err) {
+                serverErrorMsg.style.display = "";
+                (window as any).grecaptcha.reset();
+            }
+        });
+
+        emailInput.addEventListener("input", () => {
+            errorMsg.classList.remove("show");
+            serverErrorMsg.style.display = "none";
+        });
+    }
+</script>

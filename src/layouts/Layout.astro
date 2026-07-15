@@ -1,0 +1,24 @@
+---
+import Footer from "../components/Footer.astro";
+import Head from "../components/Head.astro";
+import Header from "../components/Header.astro";
+import { getLangFromUrl } from "../i18n/utils";
+import "../styles/index.scss";
+
+const { canonical } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <Head canonical={canonical} lang={lang} />
+  </head>
+  <body>
+    <Header lang={lang} />
+    <main>
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

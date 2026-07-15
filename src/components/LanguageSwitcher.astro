@@ -1,0 +1,23 @@
+---
+import { getLangFromUrl, getLocalizedPath, languages } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const currentPath = Astro.url.pathname;
+---
+
+<div class="language-switcher">
+    {
+        Object.entries(languages).map(([locale, label]) => (
+            <a
+                href={getLocalizedPath(
+                    currentPath,
+                    locale as keyof typeof languages,
+                )}
+                class={locale === lang ? "active" : ""}
+                aria-label={`Switch to ${label}`}
+            >
+                {locale.toUpperCase()}
+            </a>
+        ))
+    }
+</div>

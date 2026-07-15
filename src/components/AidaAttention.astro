@@ -1,0 +1,47 @@
+---
+import { Image } from "astro:assets";
+import attentionBg from "../assets/images/backgrounds/attention.webp";
+import attentionHero from "../assets/images/backgrounds/attention_hero.webp";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import MultiLineText from "./i18n/MultiLineText.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Get structured title data
+const heroTitle = t("hero.title");
+---
+
+<section id="attention">
+  <Image
+    src={attentionBg}
+    alt="Hero Background"
+    class="background-image"
+    format="avif"
+    widths={[700, 1100, 1366, 1650]}
+    sizes="100vw"
+    loading="eager"
+    decoding="async"
+    fetchpriority="high"
+    height={1173}
+    width={1366}
+  />
+  <div class="inner grid2">
+    <div class="hero">
+      <MultiLineText lines={heroTitle} tag="h1" class="hero-title"/>
+    </div>
+    <div class="hero-div">
+      <Image
+        src={attentionHero}
+        alt="Hero Image"
+        widths={[250, 344, 516]}
+        format="avif"
+        sizes="(max-width: 700px) 250px, 344px ,516px"
+        width={344}
+        height={344}
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+  </div>
+</section>

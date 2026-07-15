@@ -1,0 +1,99 @@
+{
+    "nav": {
+        "home": "Startseite",
+        "products": "Produkte",
+        "contact": "Kontakt",
+        "about": "Wofür wir stehen"
+    },
+    "hero": {
+        "title": [
+            "Ein neuer,",
+            "intuitiver,",
+            "europäischer",
+            "Cloud-Provider."
+        ]
+    },
+    "interest": {
+        "title": [
+            "Was bieten ",
+            "wir an?"
+        ],
+        "description": [
+            "Eine neue Cloud ",
+            "mit dem zentralen Ziel, ",
+            "das Leben von Entwicklern, Administratoren, und KMUs stark zu vereinfachen. ",
+            "Und das, komplett unabhängig hier in Deutschland."
+        ]
+    },
+    "desire": {
+        "title": [
+            "Das ",
+            "zeichnet ",
+            "uns aus"
+        ],
+        "hosted": {
+            "title": "In Deutschland gehostet",
+            "description": "Mit höchsten qualitativen Standards und professionell administriert."
+        },
+        "infrastructure": {
+            "title": "Eigene Infrastruktur",
+            "description": "Wir sind kein AWS-Wrapper sondern bieten full stack eine souveräne Lösung"
+        },
+        "gdpr": {
+            "title": "DSGVO-konform",
+            "description": "Wir halten höchste Datenschutz und -Sicherheitsstandards ein."
+        }
+    },
+    "demo": {
+        "request": "Demo anfragen",
+        "contact": "Kontaktiere uns",
+        "email": {
+            "placeholder": "E-Mail-Adresse eingeben"
+        },
+        "submit": "Absenden",
+        "error": {
+            "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+            "server": "Beim Absenden Ihrer Anfrage ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+        },
+        "thankyou": "Vielen Dank! Wir werden Sie in Kürze kontaktieren.",
+        "contactForm": {
+            "title": "Kontakt-Anfrage",
+            "description": "Allgemeine Kontakt-Anfrage"
+        },
+        "context":[
+                    "Geben Sie Ihre E-Mail-Adresse ein, um eine Demo anzufordern.",
+                    "Wir verwenden Ihre E-Mail-Adresse nur, um Sie mit Details zur Demo zu kontaktieren."
+                ],
+        "approval": "Mit dem Absenden stimmen Sie unseren "
+    },
+    "site": {
+        "title": "WeStack",
+        "description": "Ein neuer, intuitiver, europäischer Cloud-Provider.",
+        "author": "WeStack"
+    },
+    "products": {
+        "title": "Unsere Produkte",
+        "more": {
+            "title": "Bald Mehr",
+            "description": "Wir erweitern stetig unser Produktportfolio."
+        },
+        "price_offer": "ab",
+        "price_period": "pro monat"
+    },
+    "common": {
+        "loading": "Laden...",
+        "error": "Fehler"
+    },
+    "footer": {
+        "contact": "Kontakt",
+        "phone": "Telefon",
+        "email": "Email",
+        "imprint": "Impressum",
+        "company_address": [
+            "Leonhardstraße 20A ",
+            "90443 Nürnberg",
+            "Ust.Id.: DE365370888"
+        ],
+        "privacy": "Datenschutzerklärung"
+    }
+}

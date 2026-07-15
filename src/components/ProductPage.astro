@@ -1,0 +1,141 @@
+---
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import Layout from "../layouts/Layout.astro";
+import DemoRequest from "./DemoRequest.astro";
+import FAQ from "../components/FAQ.astro";
+
+const { slug } = Astro.params;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Get products for the current language
+const products = (
+    await getCollection("products", ({ data }) => data.lang === lang)
+).sort((a, b) => (a.data.id || 0) - (b.data.id || 0));
+
+// Find product by slug, handling nested directory structure
+const product = products.find((p: any) => {
+    const productSlug = p.slug.includes("/") ? p.slug.split("/")[1] : p.slug;
+    return productSlug === slug;
+});
+if (!product) throw new Error("Product not found");
+
+// Render the markdown content
+const { Content } = await product.render();
+
+// This type definition assumes your `icon` field is an imported image
+type FAQItem = {
+  name: string;
+  acceptedAnswer: string;
+};
+
+export type ProductData = {
+    id: number;
+    title: string;
+    description: string;
+    // The icon field should be typed as an imported image object
+    icon: any;
+    iconPNG: any;
+    tags?: string[];
+    price: number;
+    priceComment: string;
+    lang: string;
+    faq: FAQItem[];
+};
+
+const productData = product.data as ProductData;
+
+// Generate Schema.org structured data for the product
+function generateStructuredData(productData: ProductData, slug: string) {
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: productData.title,
+        description: productData.description,
+        // The image path for structured data must be a string, and it's relative to the site root
+        image: `${Astro.site}${productData.iconPNG.src}`,
+        url:
+            lang === "de"
+                ? `${Astro.site}products/${slug}`
+                : `${Astro.site}en/products/${slug}`,
+        // brand: {
+        //     "@type": "Organization",
+        //     name: "WeStack",
+        // },
+        contact: {
+            "@type": "Contact",
+            telephone: "+49 163 1944 738",
+            email: "info@westack-it.eu",
+        },
+        offers: {
+            "@type": "Offer",
+            availability: "https://schema.org/InStock",
+            // priceType: "https://schema.org/Negotiable",
+            priceType: "https://schema.org/FromPrice",
+            priceCurrency: "EUR",
+            price: productData.price.toString(),
+            priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+                .toISOString()
+                .split("T")[0],
+
+            availableDeliveryMethod: "https://schema.org/Download",
+            hasMerchantReturnPolicy: {
+                "@type": "MerchantReturnPolicy",
+                applicableCountry: "DE",
+                returnPolicyCategory:
+                    "https://schema.org/MerchantReturnFiniteReturnWindow",
+                merchantReturnDays: 14,
+                // returnMethod: "https://schema.org/KeepProduct",
+                returnFees: "https://schema.org/FreeReturn",
+            },
+        },
+        keywords: productData.tags ? productData.tags.join(", ") : "",
+        category: "Software Service",
+    };
+
+    return JSON.stringify(structuredData);
+}
+---
+
+<Layout
+    canonical={lang === "de"
+        ? `${Astro.site}products/${slug}/`
+        : `${Astro.site}en/products/${slug}/`}
+>
+    <script
+        type="application/ld+json"
+        set:html={generateStructuredData(productData, slug!)}
+    />
+    <section class="product-detail">
+        <div class="inner">
+            <div class="product-card">
+                <div class="product-header">
+                    <Image src={product.data.icon} alt={productData.title} />
+                    <h2>{productData.title}</h2>
+                    <p>{productData.description}</p>
+                    <div class={`circle ${productData.priceComment ? "with-comment" : "no-comment"}`}>
+                        <span class="price-offer">{t("products.price_offer")}</span>
+                        <span class="price">{productData.price}€</span>
+                        <span class="price-period">{t("products.price_period")}</span>
+                        {productData.priceComment && <span class="comment">{productData.priceComment}</span>}
+                    </div>
+                </div>
+                                
+                <DemoRequest
+                    product={{ slug: product.slug, ...productData }}
+                    buttonTitle={t("demo.request")}
+                />
+
+                <article>
+                    <Content />
+                </article>
+                
+                {productData.faq.length > 0 && (
+                    <FAQ items={productData.faq} />
+                )}
+            </div>
+        </div>
+    </section>
+</Layout>

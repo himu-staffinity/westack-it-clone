@@ -1,0 +1,20 @@
+---
+export interface Props {
+  lines: string[] | { [key: string]: string };
+  tag?: keyof HTMLElementTagNameMap;
+  class?: string;
+}
+
+const { lines, tag = "div", class: className } = Astro.props;
+
+// Convert object to array if needed
+const lineArray = Array.isArray(lines) ? lines : Object.values(lines);
+
+const Tag = tag;
+---
+
+<Tag class={className}>
+  {lineArray.map((line, index) => (
+    <span class="multi-line">{line}</span>
+  ))}
+</Tag>

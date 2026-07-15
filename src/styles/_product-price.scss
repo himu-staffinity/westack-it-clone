@@ -1,0 +1,83 @@
+@use "variables";
+@use "breakpoints";
+
+.circle {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  background-image: url("/assets/images/starburst.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-20deg);
+
+    @include breakpoints.mobile{
+      right: 15px;
+    }
+
+    @include breakpoints.tablet{
+      top: 0px;
+      right: 5px;
+    }
+
+    &.no-comment {
+      width: 200px;   
+      height: 180px;
+
+        @include breakpoints.mobile{
+            width: 100px;
+            height: 80px;
+          }
+    }
+    &.with-comment {
+      width: 200px;
+      height: 200px;
+
+        @include breakpoints.mobile{
+            width: 100px;
+            height: 110px;
+          }
+    }
+}
+
+.price {
+  font-size: 2.2rem;
+  line-height: 1;
+  font-weight: 600;
+  margin: 0 5px;
+
+  @include breakpoints.mobile{
+      font-size: 1.2rem;
+    }
+}
+
+.comment {
+  font-size: 0.7rem;
+  line-height: 1;
+  text-align: center;
+  margin: 5px 50px 0;
+
+  @include breakpoints.mobile{
+      font-size: 0.4rem;
+      margin: 0 25px;
+    }
+}
+
+.price-offer,.price-period{
+  font-size: 0.8rem;
+  line-height: 1;
+  margin: 0;
+  font-weight: 250;
+
+  @include breakpoints.mobile{
+      font-size: 0.6rem;
+    }
+}
+
+
+
+

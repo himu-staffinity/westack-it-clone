@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const pages = await getCollection('pages');
+
+const privacySlug = `${lang}/privacy-policy`;
+const privacy = pages.find(entry => entry.slug === privacySlug);
+
+if (!privacy) {
+  return Astro.redirect('/'); 
+}
+
+const { Content } = await privacy.render();
+---
+
+<Layout title={privacy.data.title}>
+  <article class="privacy">
+    <h1 class="privacy-heading">{privacy.data.title}</h1>
+    <Content />
+  </article>
+</Layout>

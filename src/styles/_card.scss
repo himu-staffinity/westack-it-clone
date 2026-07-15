@@ -1,0 +1,34 @@
+@use "variables";
+@use "breakpoints";
+
+.card {
+    color: variables.$white;
+    background-color: variables.$darkeraccent;
+    transition: all 100ms linear;
+    border-radius: 8px;
+    border: 2px solid variables.$red;
+    padding: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    @include breakpoints.mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        h2{
+            font-size: 18px;
+        }
+        p{
+            font-size: 16px;
+        }
+        .svg-images{
+            height: 50px;
+            width: 50px;
+        }
+    }
+}

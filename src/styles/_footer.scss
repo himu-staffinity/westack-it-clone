@@ -1,0 +1,186 @@
+@use "breakpoints";
+@use "variables";
+
+footer {
+   width: 100%;
+
+  section {
+    position: relative; 
+    overflow: hidden;
+    height: 950px;
+    z-index: 0;
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+      
+    @include breakpoints.tablet {
+      min-height: 1100px;
+    }
+
+    @include breakpoints.mobile {
+      min-height: 1700px;
+    }
+
+    @include breakpoints.large-desktop {
+      min-height: 1600px;
+    }
+
+    .background-image {
+      z-index: -1;
+      display: block;
+    }
+
+    .inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+  }
+
+  .author-card img {
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 1rem;
+  }
+
+  .grid3 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 2rem; 
+
+    @include breakpoints.mobile {
+      flex-direction: column; 
+    }
+
+
+  p {
+    margin-bottom: 0;
+  }
+
+  .author-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    a{
+      color:variables.$white;
+
+      &:hover, &:focus {
+        color: variables.$darkeraccent;
+    }
+    }
+  }
+
+  .footer-title {
+    font-size: 1.4rem;
+
+    @include breakpoints.mobile {
+      font-size: 1.1rem;
+    }
+
+    @include breakpoints.tablet{
+      font-size: 20px;
+    }
+
+    @include breakpoints.tablet-or-smaller{
+      font-size: 21px;
+    }
+
+    @include breakpoints.large-desktop {
+      font-size: 1.6rem;
+    }
+  }
+
+  .company-address{
+    .multi-line {
+      display: block;
+       
+  }
+  }
+
+  .footer-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    align-items: center;
+    text-align: start;
+    padding: 1rem 1rem;
+
+
+    div {
+      width: 100%;
+    }
+
+    p {
+      @include breakpoints.desktop{
+         font-size: 0.75rem;
+      }
+     
+      @include breakpoints.mobile {
+        font-size: 0.6rem;
+      }
+
+      @include breakpoints.tablet{
+        font-size: 0.6rem;
+      }
+
+      @include breakpoints.tablet-or-smaller{
+        font-size: 0.6rem;
+      }
+
+      @include breakpoints.large-desktop {
+        font-size: 0.85rem;
+      }
+    }
+    
+    a{
+      color: variables.$lightaccent;
+
+      @include breakpoints.tablet{
+        font-size: 20px;
+      }
+    }
+
+    @include breakpoints.tablet-or-smaller {
+      align-items: start;
+      text-align: center;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @include breakpoints.mobile {
+    .grid2 {
+      grid-template-columns: 1fr;
+    }
+    .footer-details{
+      display: flex;
+      flex-direction: column;
+    }
+    
+  }
+
+  @include breakpoints.tablet{
+    .footer-details{
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+   @include breakpoints.tablet-or-smaller{
+    .footer-details{
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}}
+
+.grid2.two-thirds, .interest-title{
+  padding: 1rem;
+}

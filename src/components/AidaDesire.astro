@@ -1,0 +1,57 @@
+---
+import { Image } from "astro:assets";
+import desireBg from "../assets/images/backgrounds/desire.webp";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import DemoRequest from "./DemoRequest.astro";
+import MultiLineText from "./i18n/MultiLineText.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Get structured title data
+const desireTitle = t("desire.title");
+---
+
+<section id="desire">
+    <Image
+        src={desireBg}
+        alt="Desire Background"
+        class="background-image"
+        format="avif"
+        widths={[700, 1100, 1366, 1650]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        height={1173}
+        width={1366}
+    />
+    <div class="inner grid2">
+        <MultiLineText lines={desireTitle} tag="h2" class="desire-title" />
+        <div class="card">
+            <div>
+                <h2 class="desire-subtitle">{t("desire.hosted.title")}</h2>
+                <p>{t("desire.hosted.description")}</p>
+            </div>
+            <div>
+                <h2 class="desire-subtitle">
+                    {t("desire.infrastructure.title")}
+                </h2>
+                <p>{t("desire.infrastructure.description")}</p>
+            </div>
+            <div>
+                <h2 class="desire-subtitle">{t("desire.gdpr.title")}</h2>
+                <p>{t("desire.gdpr.description")}</p>
+            </div>
+        </div>
+    </div>
+
+    <DemoRequest
+        product={{
+            slug: "desire-section",
+            title: t("demo.contactForm.title"),
+            description: t("demo.contactForm.description"),
+        }}
+        buttonTitle={t("demo.contact")}
+    />
+</section>

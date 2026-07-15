@@ -1,0 +1,55 @@
+---
+import { Image } from "astro:assets";
+import interestBg from "../assets/images/backgrounds/interest.webp";
+import interestHero from "../assets/images/backgrounds/interest_hero.webp";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import MultiLineText from "./i18n/MultiLineText.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Get structured data
+const interestTitle = t("interest.title");
+const interestDescription = t("interest.description");
+---
+
+<section id="interest">
+    <Image
+        src={interestBg}
+        alt="Interest Background"
+        class="background-image"
+        format="avif"
+        widths={[700, 1100, 1366, 1650]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        width={1366}
+        height={1173}
+    />
+    <div class="inner">
+        <div class="grid2">
+            <div class="card">
+                <MultiLineText
+                    lines={interestTitle}
+                    tag="h2"
+                    class="interest-title"
+                />
+                <MultiLineText lines={interestDescription} tag="p" />
+            </div>            
+            <div class="hero-div-interest">
+                <Image
+                    src={interestHero}
+                    alt="Hero Image"
+                    widths={[250, 372]}
+                    sizes="(max-width: 700px) 250px, 372px"
+                    format="avif"
+                    width={372}
+                    height={372}
+                    loading="eager"
+                    decoding="async"
+                />
+            </div>
+        </div>
+    </div>
+</section>

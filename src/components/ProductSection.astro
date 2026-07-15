@@ -1,0 +1,68 @@
+---
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Get products for the current language
+const products = await getCollection(
+    "products",
+    ({ data }) => data.lang === lang,
+);
+const sortedProducts = products.sort(
+    (a, b) => (a.data.id || 0) - (b.data.id || 0),
+);
+---
+
+<section id="product">
+    <div class="inner">
+        <h2 class="interest-title">{t("products.title")}</h2>
+        <div class="grid3">
+            {
+                sortedProducts.map((product) => {
+                    // Extract the base slug (remove language directory if present)
+                    const baseSlug = product.slug.includes("/")
+                        ? product.slug.split("/")[1]
+                        : product.slug;
+
+                    // Generate the correct URL based on current language
+                    const productUrl =
+                        lang === "de"
+                            ? `/products/${baseSlug}/`
+                            : `/en/products/${baseSlug}/`;
+
+                    return (
+                        <a
+                            href={productUrl}
+                            class="card"
+                            style="text-decoration: none; color: inherit;"
+                        >
+                            <Image
+                                src={product.data.icon}
+                                alt={product.data.title}
+                                width={150}
+                                height={150}
+                                class="svg-images"
+                            />
+                            <h2 class="product-title">{product.data.title}</h2>
+                            <p>{product.data.description}</p>
+                        </a>
+                    );
+                })
+            }
+            <div class="card">
+                <Image
+                    src={import("../assets/images/products/plus.svg")}
+                    alt="More Products"
+                    width={150}
+                    height={150}
+                    class="svg-images"
+                />
+                <h2 class="product-title">{t("products.more.title")}</h2>
+                <p>{t("products.more.description")}</p>
+            </div>
+        </div>
+    </div>
+</section>

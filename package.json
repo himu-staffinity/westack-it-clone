@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "aws-deploy": "aws s3 sync dist/ s3://westack-it-eu-public/ --endpoint-url https://sines-3.storage.gcore.dev"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.1",

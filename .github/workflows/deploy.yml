@@ -33,7 +33,8 @@ jobs:
       - name: Sync to S3-compatible storage
         env:
           AWS_ENDPOINT_URL: ${{ secrets.AWS_ENDPOINT_URL || 'https://sines-3.storage.gcore.dev' }}
+          AWS_MAX_CONCURRENT_REQUESTS: 50
         run: |
-          aws s3 sync dist/ s3://westack-it-eu-public/ \
-            --endpoint-url "$AWS_ENDPOINT_URL" \
-            --delete
+          aws s3 cp dist/ s3://westack-it-eu-public/ \
+            --recursive \
+            --endpoint-url "$AWS_ENDPOINT_URL"

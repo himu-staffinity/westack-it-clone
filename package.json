@@ -7,7 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "aws-deploy": "aws s3 sync dist/ s3://westack-it-eu-public/ --endpoint-url https://sines-3.storage.gcore.dev"
+    "aws-deploy": "AWS_MAX_CONCURRENT_REQUESTS=50 aws s3 cp dist/ s3://westack-it-eu-public/ --recursive --endpoint-url https://sines-3.storage.gcore.dev"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.1",

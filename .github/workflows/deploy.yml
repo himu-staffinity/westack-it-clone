@@ -9,6 +9,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -38,3 +41,76 @@ jobs:
           aws s3 cp dist/ s3://westack-it-eu-public/ \
             --recursive \
             --endpoint-url "$AWS_ENDPOINT_URL"
+
+  deploy-fastedge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build FastEdge WASM binaries
+        run: |
+          for file in auth callback request-demo; do
+            npx fastedge-build --input "edge/${file}.js" --output "edge/${file}.wasm"
+          done
+
+      - name: Upload WASM binaries to Gcore
+        env:
+          GCORE_API_KEY: ${{ secrets.GCORE_API_KEY }}
+        run: |
+          declare -A BINARY_IDS
+          for file in auth callback request-demo; do
+            echo "Uploading edge/${file}.wasm..."
+            RESPONSE=$(curl --fail --silent --show-error \
+              -X POST 'https://api.gcore.com/fastedge/v1/binaries/raw' \
+              -H "Authorization: APIKey $GCORE_API_KEY" \
+              -H 'Content-Type: application/octet-stream' \
+              --data-binary "@./edge/${file}.wasm")
+            BINARY_ID=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+            BINARY_IDS[$file]=$BINARY_ID
+            echo "  $file → binary ID $BINARY_ID"
+          done
+
+      - name: Update FastEdge apps
+        env:
+          GCORE_API_KEY: ${{ secrets.GCORE_API_KEY }}
+          FASTEDGE_APP_AUTH: ${{ secrets.FASTEDGE_APP_AUTH }}
+          FASTEDGE_APP_CALLBACK: ${{ secrets.FASTEDGE_APP_CALLBACK }}
+          FASTEDGE_APP_REQUEST_DEMO: ${{ secrets.FASTEDGE_APP_REQUEST_DEMO }}
+        run: |
+          declare -A APP_IDS
+          APP_IDS[auth]=$FASTEDGE_APP_AUTH
+          APP_IDS[callback]=$FASTEDGE_APP_CALLBACK
+          APP_IDS[request-demo]=$FASTEDGE_APP_REQUEST_DEMO
+
+          declare -A BINARY_IDS
+          for file in auth callback request-demo; do
+            RESPONSE=$(curl --fail --silent --show-error \
+              -X POST 'https://api.gcore.com/fastedge/v1/binaries/raw' \
+              -H "Authorization: APIKey $GCORE_API_KEY" \
+              -H 'Content-Type: application/octet-stream' \
+              --data-binary "@./edge/${file}.wasm")
+            BINARY_ID=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+            BINARY_IDS[$file]=$BINARY_ID
+          done
+
+          for file in auth callback request-demo; do
+            APP_ID=${APP_IDS[$file]}
+            if [ -z "$APP_ID" ]; then
+              echo "WARN: No app ID for $file — skipping update. Set FASTEDGE_APP_${file^^} secret to enable."
+              continue
+            fi
+            echo "Updating app $APP_ID ($file) → binary ${BINARY_IDS[$file]}..."
+            curl --fail --silent --show-error \
+              -X PUT "https://api.gcore.com/fastedge/v1/apps/$APP_ID" \
+              -H "Authorization: APIKey $GCORE_API_KEY" \
+              -H 'Content-Type: application/json' \
+              -d "{\"binary\": ${BINARY_IDS[$file]}, \"status\": 1, \"name\": \"westack-${file}\"}"
+            echo "  Done."
+          done

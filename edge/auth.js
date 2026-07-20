@@ -1,9 +1,8 @@
-import type { APIRoute } from 'astro';
-import * as env from 'astro:env/server';
+import { getEnv } from 'fastedge::env';
 
-export const GET: APIRoute = async ({ request }) => {
-  const client_id = env.GITHUB_CLIENT_ID;
 
+const GET = async ({ request }) => {
+  const client_id = getEnv('GITHUB_CLIENT_ID');
   try {
     const url = new URL(request.url);
     const redirectUrl = new URL('https://github.com/login/oauth/authorize');
@@ -16,11 +15,13 @@ export const GET: APIRoute = async ({ request }) => {
     );
     return Response.redirect(redirectUrl.href, 301);
 
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error(error);
-    return new Response(err.message, {
+  } catch (error) {
+    return new Response(error.message, {
       status: 500,
     });
   }
 }
+
+addEventListener('fetch', (event) => {
+  event.respondWith(GET(event.request));
+});

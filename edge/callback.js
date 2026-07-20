@@ -1,7 +1,7 @@
-import type { APIRoute } from 'astro';
-import * as env from 'astro:env/server';
+import { getSecret } from 'fastedge::secret';
+import { getEnv } from 'fastedge::env'
 
-function renderBody(status: any, content: any) {
+function renderBody(status, content) {
   const html = `
     <script>
       const receiveMessage = (message) => {
@@ -19,9 +19,9 @@ function renderBody(status: any, content: any) {
   return blob;
 }
 
-export const GET: APIRoute = async ({ request }) => {
-  const client_id = env.GITHUB_CLIENT_ID;
-  const client_secret = env.GITHUB_CLIENT_SECRET;
+const GET = async (request) => {
+  const client_id = getEnv('GITHUB_CLIENT_ID');
+  const client_secret = getSecret('GITHUB_CLIENT_SECRET');
 
   try {
     const url = new URL(request.url);
@@ -60,10 +60,9 @@ export const GET: APIRoute = async ({ request }) => {
       status: 200
     });
 
-  } catch (error: unknown) {
-    const err = error as Error;
-    console.error(err);
-    return new Response(err.message, {
+  } catch (error) {
+    console.error(error);
+    return new Response(error.message, {
       headers: {
         'content-type': 'text/html;charset=UTF-8',
       },
@@ -71,3 +70,7 @@ export const GET: APIRoute = async ({ request }) => {
     });
   }
 }
+
+addEventListener('fetch', (event) => {
+  event.respondWith(GET(event.request));
+});

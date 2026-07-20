@@ -56,16 +56,16 @@ jobs:
 
       - name: Build FastEdge WASM binaries
         run: |
-          for file in auth callback request-demo; do
+          for file in github request-demo; do
             npx fastedge-build --input "edge/${file}.js" --output "edge/${file}.wasm"
           done
 
       - name: Upload WASM binaries to Gcore
+        id: upload
         env:
           GCORE_API_KEY: ${{ secrets.GCORE_API_KEY }}
         run: |
-          declare -A BINARY_IDS
-          for file in auth callback request-demo; do
+          for file in github request-demo; do
             echo "Uploading edge/${file}.wasm..."
             RESPONSE=$(curl --fail --silent --show-error \
               -X POST 'https://api.gcore.com/fastedge/v1/binaries/raw' \
@@ -73,44 +73,38 @@ jobs:
               -H 'Content-Type: application/octet-stream' \
               --data-binary "@./edge/${file}.wasm")
             BINARY_ID=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
-            BINARY_IDS[$file]=$BINARY_ID
+            echo "BINARY_ID_${file}=${BINARY_ID}" >> "$GITHUB_OUTPUT"
             echo "  $file → binary ID $BINARY_ID"
           done
 
       - name: Update FastEdge apps
         env:
           GCORE_API_KEY: ${{ secrets.GCORE_API_KEY }}
+          # github.wasm handles both auth and callback via URL routing
           FASTEDGE_APP_AUTH: ${{ secrets.FASTEDGE_APP_AUTH }}
           FASTEDGE_APP_CALLBACK: ${{ secrets.FASTEDGE_APP_CALLBACK }}
           FASTEDGE_APP_REQUEST_DEMO: ${{ secrets.FASTEDGE_APP_REQUEST_DEMO }}
+          BINARY_ID_GITHUB: ${{ steps.upload.outputs.BINARY_ID_github }}
+          BINARY_ID_REQUEST_DEMO: ${{ steps.upload.outputs['BINARY_ID_request-demo'] }}
         run: |
-          declare -A APP_IDS
-          APP_IDS[auth]=$FASTEDGE_APP_AUTH
-          APP_IDS[callback]=$FASTEDGE_APP_CALLBACK
-          APP_IDS[request-demo]=$FASTEDGE_APP_REQUEST_DEMO
-
-          declare -A BINARY_IDS
-          for file in auth callback request-demo; do
-            RESPONSE=$(curl --fail --silent --show-error \
-              -X POST 'https://api.gcore.com/fastedge/v1/binaries/raw' \
-              -H "Authorization: APIKey $GCORE_API_KEY" \
-              -H 'Content-Type: application/octet-stream' \
-              --data-binary "@./edge/${file}.wasm")
-            BINARY_ID=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
-            BINARY_IDS[$file]=$BINARY_ID
-          done
-
-          for file in auth callback request-demo; do
-            APP_ID=${APP_IDS[$file]}
-            if [ -z "$APP_ID" ]; then
-              echo "WARN: No app ID for $file — skipping update. Set FASTEDGE_APP_${file^^} secret to enable."
-              continue
-            fi
-            echo "Updating app $APP_ID ($file) → binary ${BINARY_IDS[$file]}..."
+          # github.wasm serves both auth and callback — point both apps to it
+          if [ -n "$FASTEDGE_APP_AUTH" ]; then
+            echo "Updating app $app_id_env → binary $BINARY_ID_GITHUB..."
             curl --fail --silent --show-error \
-              -X PUT "https://api.gcore.com/fastedge/v1/apps/$APP_ID" \
+              -X PUT "https://api.gcore.com/fastedge/v1/apps/$FASTEDGE_APP_AUTH" \
               -H "Authorization: APIKey $GCORE_API_KEY" \
               -H 'Content-Type: application/json' \
-              -d "{\"binary\": ${BINARY_IDS[$file]}, \"status\": 1, \"name\": \"westack-${file}\"}"
+              -d "{\"binary\": $BINARY_ID_GITHUB, \"status\": 1}"
             echo "  Done."
-          done
+          fi
+
+          # request-demo app
+          if [ -n "$FASTEDGE_APP_REQUEST_DEMO" ]; then
+            echo "Updating app $FASTEDGE_APP_REQUEST_DEMO → binary $BINARY_ID_REQUEST_DEMO..."
+            curl --fail --silent --show-error \
+              -X PUT "https://api.gcore.com/fastedge/v1/apps/$FASTEDGE_APP_REQUEST_DEMO" \
+              -H "Authorization: APIKey $GCORE_API_KEY" \
+              -H 'Content-Type: application/json' \
+              -d "{\"binary\": $BINARY_ID_REQUEST_DEMO, \"status\": 1}"
+            echo "  Done."
+          fi

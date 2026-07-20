@@ -3,7 +3,7 @@ backend:
   repo: himu-staffinity/westack-it-clone
   branch: dev
   site_domain: http://localhost:4321
-  base_url: http://localhost:4321
+  base_url: http://localhost:8080
   auth_endpoint: /api/auth/
 
 media_folder: public/assets/images

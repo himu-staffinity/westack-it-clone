@@ -31,14 +31,14 @@ jobs:
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set default.region ${{ secrets.AWS_REGION || 'us-east-1' }}
+          aws configure set default.region ${{ secrets.AWS_REGION || 'luxembourg-2' }}
 
       - name: Sync to S3-compatible storage
         env:
-          AWS_ENDPOINT_URL: ${{ secrets.AWS_ENDPOINT_URL || 'https://sines-3.storage.gcore.dev' }}
+          AWS_ENDPOINT_URL: ${{ secrets.AWS_ENDPOINT_URL || 'https://luxembourg-2.storage.gcore.dev' }}
           AWS_MAX_CONCURRENT_REQUESTS: 50
         run: |
-          aws s3 cp dist/ s3://westack-it-eu-public/ \
+          aws s3 cp dist/ s3://westack-it-eu/ \
             --recursive \
             --endpoint-url "$AWS_ENDPOINT_URL"
 

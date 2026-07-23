@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# build the wasm files
-for file in github request-demo test-edge; do
-  npx fastedge-build --input "edge/${file}.js" --output "edge/${file}.wasm"
-done
+# build the combined wasm file
+npx fastedge-build --config .fastedge/build-config.js
 
-# run a test wasm file server
+# run the combined wasm file
 PORT=8080
 echo "Starting FastEdge server at localhost:${PORT}"
 
-fastedge-run http -w ./edge/github.wasm --port "${PORT}" --wasi-http true
+fastedge-run http -w .fastedge/dist/fastedge.wasm --port "${PORT}" --wasi-http true

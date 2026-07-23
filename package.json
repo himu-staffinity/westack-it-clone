@@ -7,7 +7,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "aws-deploy": "AWS_MAX_CONCURRENT_REQUESTS=50 aws s3 cp dist/ s3://westack-it-eu-public/ --recursive --endpoint-url https://sines-3.storage.gcore.dev"
+    "aws-deploy": "AWS_MAX_CONCURRENT_REQUESTS=50 aws s3 cp dist/ s3://westack-it-eu/ --recursive --endpoint-url https://luxembourg-2.storage.gcore.dev",
+    "fe:build": "fastedge-build --config .fastedge/build-config.js",
+    "fe:run": "fastedge-run http -w .fastedge/dist/fastedge.wasm --port 8080 --wasi-http true"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.4.1",

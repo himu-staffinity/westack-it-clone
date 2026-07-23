@@ -1,6 +1,6 @@
 const config = {
   "type": "static",
-  "entryPoint": ".fastedge/combined.js",
+  "entryPoint": ".fastedge/server.js",
   "ignoreDotFiles": true,
   "ignoreDirs": [
     "./node_modules"

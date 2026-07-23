@@ -54,57 +54,37 @@ jobs:
 
       - run: npm ci
 
-      - name: Build FastEdge WASM binaries
-        run: |
-          for file in github request-demo; do
-            npx fastedge-build --input "edge/${file}.js" --output "edge/${file}.wasm"
-          done
+      - name: Build Astro site (required for static assets in WASM)
+        run: npm run build
 
-      - name: Upload WASM binaries to Gcore
+      - name: Build FastEdge combined WASM
+        run: npm run fe:build
+
+      - name: Upload WASM binary to Gcore
         id: upload
         env:
           GCORE_API_KEY: ${{ secrets.GCORE_API_KEY }}
         run: |
-          for file in github request-demo; do
-            echo "Uploading edge/${file}.wasm..."
-            RESPONSE=$(curl --fail --silent --show-error \
-              -X POST 'https://api.gcore.com/fastedge/v1/binaries/raw' \
-              -H "Authorization: APIKey $GCORE_API_KEY" \
-              -H 'Content-Type: application/octet-stream' \
-              --data-binary "@./edge/${file}.wasm")
-            BINARY_ID=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
-            echo "BINARY_ID_${file}=${BINARY_ID}" >> "$GITHUB_OUTPUT"
-            echo "  $file → binary ID $BINARY_ID"
-          done
+          echo "Uploading .fastedge/fastedge.wasm..."
+          RESPONSE=$(curl --fail --silent --show-error \
+            -X POST 'https://api.gcore.com/fastedge/v1/binaries/raw' \
+            -H "Authorization: APIKey $GCORE_API_KEY" \
+            -H 'Content-Type: application/octet-stream' \
+            --data-binary "@./.fastedge/fastedge.wasm")
+          BINARY_ID=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+          echo "BINARY_ID=${BINARY_ID}" >> "$GITHUB_OUTPUT"
+          echo "  Uploaded → binary ID $BINARY_ID"
 
-      - name: Update FastEdge apps
+      - name: Update FastEdge app
         env:
           GCORE_API_KEY: ${{ secrets.GCORE_API_KEY }}
-          # github.wasm handles both auth and callback via URL routing
-          FASTEDGE_APP_AUTH: ${{ secrets.FASTEDGE_APP_AUTH }}
-          FASTEDGE_APP_CALLBACK: ${{ secrets.FASTEDGE_APP_CALLBACK }}
-          FASTEDGE_APP_REQUEST_DEMO: ${{ secrets.FASTEDGE_APP_REQUEST_DEMO }}
-          BINARY_ID_GITHUB: ${{ steps.upload.outputs.BINARY_ID_github }}
-          BINARY_ID_REQUEST_DEMO: ${{ steps.upload.outputs['BINARY_ID_request-demo'] }}
+          FASTEDGE_APP_ID: '2811'
+          BINARY_ID: ${{ steps.upload.outputs.BINARY_ID }}
         run: |
-          # github.wasm serves both auth and callback — point both apps to it
-          if [ -n "$FASTEDGE_APP_AUTH" ]; then
-            echo "Updating app $app_id_env → binary $BINARY_ID_GITHUB..."
-            curl --fail --silent --show-error \
-              -X PUT "https://api.gcore.com/fastedge/v1/apps/$FASTEDGE_APP_AUTH" \
-              -H "Authorization: APIKey $GCORE_API_KEY" \
-              -H 'Content-Type: application/json' \
-              -d "{\"binary\": $BINARY_ID_GITHUB, \"status\": 1}"
-            echo "  Done."
-          fi
-
-          # request-demo app
-          if [ -n "$FASTEDGE_APP_REQUEST_DEMO" ]; then
-            echo "Updating app $FASTEDGE_APP_REQUEST_DEMO → binary $BINARY_ID_REQUEST_DEMO..."
-            curl --fail --silent --show-error \
-              -X PUT "https://api.gcore.com/fastedge/v1/apps/$FASTEDGE_APP_REQUEST_DEMO" \
-              -H "Authorization: APIKey $GCORE_API_KEY" \
-              -H 'Content-Type: application/json' \
-              -d "{\"binary\": $BINARY_ID_REQUEST_DEMO, \"status\": 1}"
-            echo "  Done."
-          fi
+          echo "Updating app $FASTEDGE_APP_ID → binary $BINARY_ID..."
+          curl --fail --silent --show-error \
+            -X PUT "https://api.gcore.com/fastedge/v1/apps/$FASTEDGE_APP_ID" \
+            -H "Authorization: APIKey $GCORE_API_KEY" \
+            -H 'Content-Type: application/json' \
+            -d "{\"binary\": $BINARY_ID, \"status\": 1}"
+          echo "  Done."

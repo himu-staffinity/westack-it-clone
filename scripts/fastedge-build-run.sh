@@ -7,4 +7,4 @@ npx fastedge-build --config .fastedge/build-config.js
 PORT=8080
 echo "Starting FastEdge server at localhost:${PORT}"
 
-fastedge-run http -w .fastedge/dist/fastedge.wasm --port "${PORT}" --wasi-http true
+fastedge-run http -w .fastedge/fastedge.wasm --port "${PORT}" --wasi-http true

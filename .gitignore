@@ -26,4 +26,4 @@ pnpm-debug.log*
 .wrangler
 *.vars
 
-edge/*.wasm
+.fastedge/*.wasm

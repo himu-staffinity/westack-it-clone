@@ -1,13 +1,13 @@
 const config = {
   "type": "static",
-  "entryPoint": "edge/combined.js",
+  "entryPoint": ".fastedge/combined.js",
   "ignoreDotFiles": true,
   "ignoreDirs": [
     "./node_modules"
   ],
   "ignoreWellKnown": false,
   "tsConfigPath": "./tsconfig.json",
-  "wasmOutput": ".fastedge/dist/fastedge.wasm",
+  "wasmOutput": ".fastedge/fastedge.wasm",
   "publicDir": "./dist"
 };
 

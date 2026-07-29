@@ -29,33 +29,7 @@ async function handleRequestDemo(request) {
 
   try {
     const body = await request.json();
-    const { email, product, recaptchaToken } = body;
-
-    const RECAPTCHA_SECRET_KEY = getSecret('RECAPTCHA_SECRET_KEY');
-    if (recaptchaToken && RECAPTCHA_SECRET_KEY) {
-      const googleResponse = await fetch(
-        'https://www.google.com/recaptcha/api/siteverify',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: `secret=${RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
-        },
-      );
-      const verification = await googleResponse.json();
-      if (!verification.success) {
-        return new Response(
-          JSON.stringify({
-            success: false,
-            message: 'Captcha verification failed',
-            debug: verification['error-codes'],
-          }),
-          {
-            headers: { 'Content-Type': 'application/json' },
-            status: 400,
-          },
-        );
-      }
-    }
+    const { email, product } = body;
 
     const BREVO_API_KEY = getSecret('BREVO_API_KEY');
     if (!BREVO_API_KEY) {

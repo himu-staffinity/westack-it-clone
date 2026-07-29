@@ -25,35 +25,6 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run build
-
-      - name: Configure AWS CLI
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set default.region ${{ secrets.AWS_REGION || 'luxembourg-2' }}
-
-      - name: Sync to S3-compatible storage
-        env:
-          AWS_ENDPOINT_URL: ${{ secrets.AWS_ENDPOINT_URL || 'https://luxembourg-2.storage.gcore.dev' }}
-          AWS_MAX_CONCURRENT_REQUESTS: 50
-        run: |
-          aws s3 cp dist/ s3://westack-it-eu/ \
-            --recursive \
-            --endpoint-url "$AWS_ENDPOINT_URL"
-
-  deploy-fastedge:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - run: npm ci
-
       - name: Build Astro site (required for static assets in WASM)
         run: npm run build
 

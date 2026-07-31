@@ -1,10 +1,10 @@
 import sitemap from "@astrojs/sitemap";
-import { defineConfig, envField } from "astro/config";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "astro/config";
 import { SITE_URL } from "./src/config";
 
 export default defineConfig({
-  output: "static",
-  trailingSlash: "ignore",
+  trailingSlash: "always",
   site: SITE_URL,
   i18n: {
     defaultLocale: "de",
@@ -15,8 +15,9 @@ export default defineConfig({
     }
   },
   integrations: [
-    sitemap({
-      customPages: [`${SITE_URL}/google-news.xml`],
-    }),
+    sitemap(),
   ],
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });

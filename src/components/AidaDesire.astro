@@ -27,18 +27,18 @@ const features = [
 ];
 ---
 
-<section id="desire" class="relative overflow-hidden py-28">
+<section id="desire" class="relative overflow-hidden bg-base py-28">
   <img
-    src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2000&q=80"
+    src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=80"
     alt=""
     loading="lazy"
-    class="absolute inset-0 h-full w-full object-cover opacity-25"
+    class="absolute inset-0 h-full w-full object-cover opacity-15 mix-blend-multiply"
   />
   <div
-    class="absolute inset-0 bg-gradient-to-b from-ink via-ink/70 to-ink"
+    class="absolute inset-0 bg-gradient-to-b from-base/85 via-base/70 to-base"
     aria-hidden="true"
   ></div>
-  <div class="bg-grid absolute inset-0 opacity-50" aria-hidden="true"></div>
+  <div class="bg-ruled absolute inset-0 opacity-50" aria-hidden="true"></div>
 
   <div class="relative z-10 mx-auto max-w-6xl px-5 text-center lg:px-8">
     <p class="reveal font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
@@ -47,20 +47,20 @@ const features = [
     <MultiLineText
       lines={desireTitle}
       tag="h2"
-      class="reveal mt-5 font-display text-4xl font-bold tracking-tight text-fg sm:text-5xl"
+      class="reveal mt-5 font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl"
     />
 
     <div class="mt-14 grid gap-5 text-left sm:grid-cols-3">
       {features.map((feature, i) => (
         <div
-          class="group reveal rounded-2xl border border-white/10 bg-surface/70 p-7 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:bg-surface"
+          class="group reveal rounded-card border border-ink/10 bg-surface p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-lift"
           style={`--reveal-delay:${i * 100}ms`}
         >
           <div
-            class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-raised text-accent transition-transform duration-300 group-hover:scale-110"
+            class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-well border border-ink/10 bg-raised text-accent transition-transform duration-300 group-hover:scale-110"
             set:html={feature.icon}
           ></div>
-          <h3 class="font-display text-lg font-semibold text-fg">
+          <h3 class="font-display text-lg font-medium text-fg">
             {feature.title}
           </h3>
           <p class="mt-2.5 text-sm leading-relaxed text-muted">

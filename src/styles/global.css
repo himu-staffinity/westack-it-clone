@@ -2,28 +2,47 @@
 
 /* ------------------------------------------------------------------ */
 /*  WeStack — design tokens                                            */
-/*  Dark, refined, enterprise-tech. One confident cyan accent.         */
+/*  Warm editorial premium. Ivory paper, espresso ink, muted gold.    */
+/*  Light theme by design: no dark variants, no glass, no glow.       */
+/*  See DESIGN.md for the full rationale.                             */
 /* ------------------------------------------------------------------ */
 @theme {
-  --color-ink: #05070d;
-  --color-base: #0a0e17;
-  --color-surface: #0e1420;
-  --color-raised: #171e2e;
-  --color-fg: #e8edf6;
-  --color-muted: #94a1b8;
-  --color-faint: #5c6a84;
-  --color-accent: #3fe0ff;
-  --color-accent-soft: #8ff2ff;
-  --color-violet: #8b7cff;
+  /* Grounds */
+  --color-paper: #faf6ec; /* page background — warm ivory */
+  --color-base: #f2ebdd; /* alternating section ground — warm sand */
+  --color-surface: #fffdf6; /* cards / plates / wells — near-white */
+  --color-raised: #ece2cd; /* inset icon wells, tinted panels */
 
-  --font-display: "Space Grotesk", "IBM Plex Sans", ui-sans-serif, system-ui,
-    sans-serif;
-  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", "Menlo", monospace;
+  /* Ink */
+  --color-ink: #1f1810; /* deepest espresso — buttons, active pill, logo */
+  --color-fg: #241d13; /* primary text */
+  --color-muted: #5f5340; /* secondary text */
+  --color-faint: #7a6c52; /* tertiary text / labels */
 
-  --animate-marquee: marquee 55s linear infinite;
-  --animate-aurora: aurora 16s ease-in-out infinite alternate;
-  --animate-aurora-slow: aurora 28s ease-in-out infinite alternate-reverse;
+  /* Warm accents */
+  --color-accent: #8a6327; /* bronze-gold — eyebrows, links, CTA */
+  --color-accent-soft: #c9a05c; /* light gold — tints only, not text */
+  --color-violet: #b06a3f; /* terracotta — secondary warm accent */
+  --color-cream: #f5eedd; /* text on dark fills */
+
+  /* Type */
+  --font-display: "Fraunces", "Georgia", "Times New Roman", ui-serif, serif;
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, "SF Mono", "Menlo", monospace;
+
+  /* Radii */
+  --radius-card: 1rem;
+  --radius-well: 0.75rem;
+
+  /* Warm ink shadows (never colored) */
+  --shadow-card: 0 1px 2px rgba(31, 24, 16, 0.05),
+    0 10px 28px -18px rgba(31, 24, 16, 0.25);
+  --shadow-lift: 0 24px 55px -28px rgba(31, 24, 16, 0.4);
+  --shadow-plate: 0 30px 60px -30px rgba(31, 24, 16, 0.45);
+
+  /* Motion */
+  --animate-marquee: marquee 70s linear infinite;
+  --animate-hero-pan: hero-pan 26s ease-in-out infinite alternate;
 
   @keyframes marquee {
     to {
@@ -31,15 +50,12 @@
     }
   }
 
-  @keyframes aurora {
-    0% {
-      transform: translate3d(0, 0, 0) scale(1);
+  @keyframes hero-pan {
+    from {
+      transform: scale(1.01) translate3d(0, 0, 0);
     }
-    50% {
-      transform: translate3d(5%, 8%, 0) scale(1.12);
-    }
-    100% {
-      transform: translate3d(-4%, -7%, 0) scale(0.94);
+    to {
+      transform: scale(1.07) translate3d(-1.5%, 0.75%, 0);
     }
   }
 }
@@ -48,13 +64,17 @@
 /*  Base                                                               */
 /* ------------------------------------------------------------------ */
 @layer base {
+  :root {
+    color-scheme: light;
+  }
+
   html {
     scroll-behavior: smooth;
-    background-color: var(--color-ink);
+    background-color: var(--color-paper);
   }
 
   body {
-    background-color: var(--color-ink);
+    background-color: var(--color-paper);
     color: var(--color-fg);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -63,8 +83,8 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--color-accent) 32%, transparent);
-    color: var(--color-fg);
+    background: color-mix(in oklab, var(--color-accent) 30%, transparent);
+    color: var(--color-ink);
   }
 
   :focus-visible {
@@ -84,7 +104,7 @@
     overflow: hidden;
   }
 
-  /* Film-grain overlay for a premium, non-flat finish.
+  /* Paper grain overlay for a tactile, non-flat finish.
      pointer-events: none so it never intercepts interaction. */
   body::after {
     content: "";
@@ -92,7 +112,7 @@
     inset: 0;
     z-index: 80;
     pointer-events: none;
-    opacity: 0.028;
+    opacity: 0.05;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 }
@@ -101,59 +121,52 @@
 /*  Components / bespoke effects                                       */
 /* ------------------------------------------------------------------ */
 @layer components {
-  /* Soft blurred colour blobs that drift behind content */
-  .aurora {
-    position: absolute;
-    border-radius: 9999px;
-    filter: blur(80px);
-    pointer-events: none;
-  }
-
-  /* Faint technical grid pattern */
-  .bg-grid {
+  /* Faint editorial layout grid (hairline, warm ink) */
+  .bg-ruled {
     background-image: linear-gradient(
         to right,
-        rgba(232, 237, 246, 0.045) 1px,
+        rgba(36, 29, 19, 0.035) 1px,
         transparent 1px
       ),
-      linear-gradient(to bottom, rgba(232, 237, 246, 0.045) 1px, transparent 1px);
-    background-size: 56px 56px;
+      linear-gradient(to bottom, rgba(36, 29, 19, 0.035) 1px, transparent 1px);
+    background-size: 64px 64px;
   }
 
-  /* Buttons */
+  /* Buttons — pill, gold & espresso. No glow. */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     border-radius: 9999px;
-    padding: 0.75rem 1.75rem;
+    padding: 0.72rem 1.75rem;
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--color-ink);
-    background: linear-gradient(
-      135deg,
-      var(--color-accent-soft),
-      var(--color-accent) 55%,
-      #29b8ff
-    );
+    letter-spacing: 0.01em;
+    color: var(--color-cream);
+    background-color: var(--color-accent);
+    border: 1px solid color-mix(in oklab, var(--color-ink) 35%, transparent);
     box-shadow:
-      0 0 24px -6px rgba(63, 224, 255, 0.55),
-      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      var(--shadow-card);
     transition:
       transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.3s ease,
-      filter 0.3s ease;
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
   }
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow:
-      0 8px 40px -6px rgba(63, 224, 255, 0.7),
-      inset 0 1px 0 rgba(255, 255, 255, 0.35);
-    filter: brightness(1.06);
+    background-color: #7c581f; /* deepened bronze on hover */
+    border-color: var(--color-ink);
+    box-shadow: var(--shadow-lift);
   }
   .btn-primary:active {
     transform: translateY(0);
+  }
+  .btn-primary:focus-visible {
+    /* espresso ring so focus is visible on the gold fill */
+    outline-color: var(--color-ink);
   }
 
   .btn-ghost {
@@ -162,27 +175,29 @@
     justify-content: center;
     gap: 0.5rem;
     border-radius: 9999px;
-    padding: 0.75rem 1.75rem;
+    padding: 0.72rem 1.75rem;
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--color-fg);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(8px);
+    border: 1px solid color-mix(in oklab, var(--color-ink) 35%, transparent);
+    background: transparent;
     transition:
       transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
       border-color 0.3s ease,
-      background 0.3s ease,
+      background-color 0.3s ease,
       color 0.3s ease;
   }
   .btn-ghost:hover {
     transform: translateY(-2px);
-    border-color: rgba(63, 224, 255, 0.5);
-    background: rgba(255, 255, 255, 0.09);
-    color: var(--color-accent-soft);
+    border-color: var(--color-accent);
+    background-color: color-mix(in oklab, var(--color-accent) 8%, transparent);
+    color: var(--color-accent);
+  }
+  .btn-ghost:active {
+    transform: translateY(0);
   }
 
-  /* Nav links with animated underline */
+  /* Nav links with animated gold underline */
   .nav-link {
     position: relative;
     padding: 0.5rem 0.75rem;
@@ -211,12 +226,12 @@
 
   /* Header: solidifies once the page is scrolled (JS toggles .scrolled) */
   header.scrolled {
-    background-color: rgba(5, 7, 13, 0.9) !important;
-    border-color: rgba(148, 163, 184, 0.14) !important;
-    box-shadow: 0 10px 40px -18px rgba(0, 0, 0, 0.7);
+    background-color: rgba(250, 246, 236, 0.96) !important;
+    border-color: rgba(36, 29, 19, 0.12) !important;
+    box-shadow: 0 10px 30px -18px rgba(31, 24, 16, 0.35);
   }
 
-  /* Mobile menu — full-screen glass overlay (JS toggles .show) */
+  /* Mobile menu — full-screen ivory sheet (JS toggles .show) */
   @media (max-width: 1023px) {
     .nav-links {
       position: fixed;
@@ -226,9 +241,9 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2.25rem;
-      background: rgba(5, 7, 13, 0.92);
-      backdrop-filter: blur(24px);
+      gap: 1.75rem;
+      background: rgba(250, 246, 236, 0.98);
+      backdrop-filter: blur(12px);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -242,7 +257,14 @@
       pointer-events: auto;
     }
     .nav-link {
-      font-size: 1.4rem;
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--color-fg);
+    }
+    .nav-link:hover {
+      color: var(--color-accent);
     }
   }
 
@@ -292,10 +314,10 @@
   /* Scroll-reveal (JS adds .is-visible) */
   .reveal {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(20px);
     transition:
-      opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
     transition-delay: var(--reveal-delay, 0ms);
   }
   .reveal.is-visible {
@@ -308,14 +330,15 @@
     display: block;
   }
 
-  /* Hero headline: last line gets the brand gradient */
+  /* Hero headline: last line gets the warm brand gradient, italic serif */
   .hero-title .multi-line:last-child {
+    font-style: italic;
     color: transparent;
     background: linear-gradient(
       100deg,
-      var(--color-accent-soft) 0%,
-      var(--color-accent) 55%,
-      var(--color-violet) 120%
+      var(--color-accent) 0%,
+      #b98a3e 50%,
+      var(--color-violet) 115%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -343,46 +366,46 @@
   }
 
   /* Long-form markdown: product detail + privacy policy */
-  .prose-dark {
+  .prose {
     color: var(--color-muted);
     font-size: 1rem;
     line-height: 1.75;
   }
-  .prose-dark > :first-child {
+  .prose > :first-child {
     margin-top: 0;
   }
-  .prose-dark h2 {
+  .prose h2 {
     font-family: var(--font-display);
     font-size: 1.6rem;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: -0.01em;
     color: var(--color-fg);
     margin: 3rem 0 1rem;
   }
-  .prose-dark h3 {
+  .prose h3 {
     font-family: var(--font-display);
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--color-fg);
     margin: 2.5rem 0 0.75rem;
   }
-  .prose-dark p {
+  .prose p {
     margin: 0 0 1.25rem;
   }
-  .prose-dark ul,
-  .prose-dark ol {
+  .prose ul,
+  .prose ol {
     margin: 0 0 1.5rem;
   }
-  .prose-dark ul {
+  .prose ul {
     list-style: none;
     padding-left: 0;
   }
-  .prose-dark ul li {
+  .prose ul li {
     position: relative;
     padding-left: 1.5rem;
     margin-bottom: 0.6rem;
   }
-  .prose-dark ul li::before {
+  .prose ul li::before {
     content: "";
     position: absolute;
     left: 0.15rem;
@@ -392,30 +415,30 @@
     border-radius: 9999px;
     background: var(--color-accent);
   }
-  .prose-dark ol {
+  .prose ol {
     list-style: decimal;
     padding-left: 1.4rem;
   }
-  .prose-dark li {
+  .prose li {
     margin-bottom: 0.5rem;
   }
-  .prose-dark strong {
+  .prose strong {
     color: var(--color-fg);
-    font-weight: 500;
+    font-weight: 600;
   }
-  .prose-dark a {
+  .prose a {
     color: var(--color-accent);
     text-decoration: underline;
     text-decoration-color: color-mix(in oklab, var(--color-accent) 40%, transparent);
     text-underline-offset: 3px;
     transition: text-decoration-color 0.3s ease;
   }
-  .prose-dark a:hover {
+  .prose a:hover {
     text-decoration-color: var(--color-accent);
   }
-  .prose-dark hr {
+  .prose hr {
     border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid color-mix(in oklab, var(--color-ink) 12%, transparent);
     margin: 2.5rem 0;
   }
 }

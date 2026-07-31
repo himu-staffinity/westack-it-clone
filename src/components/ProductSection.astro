@@ -15,12 +15,8 @@ const sortedProducts = products.sort(
 );
 ---
 
-<section id="product" class="relative overflow-hidden bg-base py-28">
-  <div
-    class="aurora left-[-14%] top-[5%] h-[26rem] w-[26rem] bg-accent/10 animate-aurora"
-    aria-hidden="true"
-  ></div>
-  <div class="bg-grid absolute inset-0 opacity-40" aria-hidden="true"></div>
+<section id="product" class="relative overflow-hidden bg-paper py-28">
+  <div class="bg-ruled absolute inset-0 opacity-50" aria-hidden="true"></div>
 
   <div class="relative z-10 mx-auto max-w-6xl px-5 lg:px-8">
     <div class="reveal mb-14 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
@@ -28,7 +24,7 @@ const sortedProducts = products.sort(
         <p class="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
           {sortedProducts.length} {t("nav.products")}
         </p>
-        <h2 class="mt-4 font-display text-4xl font-bold tracking-tight text-fg sm:text-5xl">
+        <h2 class="mt-4 font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl">
           {t("products.title")}
         </h2>
       </div>
@@ -67,14 +63,10 @@ const sortedProducts = products.sort(
           return (
             <a
               href={productUrl}
-              class="group reveal relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-surface/70 p-6 backdrop-blur transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/40 hover:bg-surface hover:shadow-[0_28px_70px_-28px_rgba(63,224,255,0.3)]"
+              class="group reveal relative flex flex-col overflow-hidden rounded-card border border-ink/10 bg-surface p-6 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/50 hover:shadow-lift"
               style={`--reveal-delay:${(i % 6) * 70}ms`}
             >
-              <div
-                class="pointer-events-none absolute -top-14 left-1/2 h-36 w-36 -translate-x-1/2 rounded-full bg-accent/10 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                aria-hidden="true"
-              ></div>
-              <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-xl border border-white/10 bg-raised/70 p-3 transition-transform duration-300 group-hover:scale-110">
+              <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-well border border-ink/10 bg-raised/70 p-3 transition-transform duration-300 group-hover:scale-110">
                 <Image
                   src={product.data.icon}
                   alt=""
@@ -83,7 +75,7 @@ const sortedProducts = products.sort(
                   class="h-full w-full object-contain"
                 />
               </div>
-              <h3 class="font-display text-xl font-semibold leading-snug text-fg">
+              <h3 class="font-display text-xl font-medium leading-snug text-fg">
                 {product.data.title}
               </h3>
               <p class="mt-2.5 line-clamp-3 text-sm leading-relaxed text-muted">
@@ -93,14 +85,14 @@ const sortedProducts = products.sort(
                 product.data.tags && product.data.tags.length > 0 && (
                   <div class="mt-5 flex flex-wrap gap-1.5">
                     {product.data.tags.slice(0, 3).map((tag) => (
-                      <span class="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 font-mono text-[10px] text-faint">
+                      <span class="rounded-full border border-ink/10 bg-raised/40 px-2.5 py-0.5 font-mono text-[10px] text-faint">
                         {tag}
                       </span>
                     ))}
                   </div>
                 )
               }
-              <div class="mt-6 flex items-center justify-between border-t border-white/5 pt-4">
+              <div class="mt-6 flex items-center justify-between border-t border-ink/10 pt-4">
                 <p class="flex items-baseline gap-1.5">
                   <span class="font-mono text-[10px] uppercase tracking-wider text-faint">
                     {t("products.price_offer")}
@@ -132,19 +124,19 @@ const sortedProducts = products.sort(
       }
 
       <div
-        class="reveal flex min-h-[16.5rem] flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 p-8 text-center transition-colors duration-300 hover:border-accent/40"
+        class="reveal flex min-h-[16.5rem] flex-col items-center justify-center rounded-card border border-dashed border-ink/25 p-8 text-center transition-colors duration-300 hover:border-accent/50"
         style="--reveal-delay:360ms"
       >
-        <div class="flex h-16 w-16 items-center justify-center rounded-xl border border-white/10 bg-white/5">
+        <div class="flex h-16 w-16 items-center justify-center rounded-well border border-ink/10 bg-raised/40">
           <Image
             src={import("../assets/images/products/plus.svg")}
             alt=""
             width={40}
             height={40}
-            class="h-10 w-10 opacity-60"
+            class="h-10 w-10 opacity-70"
           />
         </div>
-        <h3 class="mt-6 font-display text-xl font-semibold text-fg">
+        <h3 class="mt-6 font-display text-xl font-medium text-fg">
           {t("products.more.title")}
         </h3>
         <p class="mt-2 max-w-xs text-sm leading-relaxed text-muted">

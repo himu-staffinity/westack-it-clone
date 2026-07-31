@@ -12,14 +12,14 @@ const { items } = Astro.props;
 ---
 
 <section class="faq mx-auto mt-16 max-w-3xl" itemscope itemtype="https://schema.org/FAQPage">
-  <h3 class="font-display text-2xl font-semibold text-fg">FAQ</h3>
+  <h3 class="font-display text-2xl font-medium text-fg">FAQ</h3>
   <ul class="mt-6 space-y-3">
     {items.map((item: FAQItem, index: number) => (
       <li
-        class={`faq-item overflow-hidden rounded-xl border transition-colors duration-300 ${
+        class={`faq-item overflow-hidden rounded-card border transition-all duration-300 ${
           index === 0
-            ? "open border-accent/30 bg-surface"
-            : "border-white/10 bg-surface/60"
+            ? "open border-accent/50 bg-surface shadow-card"
+            : "border-ink/10 bg-surface"
         }`}
         itemscope
         itemprop="mainEntity"
@@ -32,11 +32,11 @@ const { items } = Astro.props;
           aria-controls={`faq-answer-${index}`}
           itemprop="name"
         >
-          <span class="font-medium leading-snug text-fg transition-colors duration-300 hover:text-accent-soft">
+          <span class="font-medium leading-snug text-fg transition-colors duration-300 hover:text-accent">
             {item.name}
           </span>
           <span
-            class="faq-icon flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/10 text-accent"
+            class="faq-icon flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-ink/15 text-accent"
             aria-hidden="true"
           >
             <svg

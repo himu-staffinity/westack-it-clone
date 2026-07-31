@@ -1,6 +1,7 @@
 ---
 title: Datenschutzerklärung
 lang: de
+
 ---
 
 Diese Datenschutzerklärung enthält detaillierte Informationen darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website www.kadalian.com besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Wir halten uns bei der Verarbeitung Ihrer Daten strikt an die gesetzlichen Bestimmungen, insbesondere an die Datenschutz-Grundverordnung („DSGVO“), und legen großen Wert darauf, dass Ihr Besuch auf unserer Website absolut sicher ist.

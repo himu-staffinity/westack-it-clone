@@ -1,55 +1,71 @@
 ---
-import { Image } from "astro:assets";
-import interestBg from "../assets/images/backgrounds/interest.webp";
-import interestHero from "../assets/images/backgrounds/interest_hero.webp";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
 import MultiLineText from "./i18n/MultiLineText.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Get structured data
 const interestTitle = t("interest.title");
 const interestDescription = t("interest.description");
+
+// Grounded technical labels — these mirror actual product names in the portfolio
+const stack = ["Kubernetes", "PostgreSQL", "S3", "Supabase", "n8n", "Nextcloud"];
 ---
 
-<section id="interest">
-    <Image
-        src={interestBg}
-        alt="Interest Background"
-        class="background-image"
-        format="avif"
-        widths={[700, 1100, 1366, 1650]}
-        sizes="100vw"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        width={1366}
-        height={1173}
-    />
-    <div class="inner">
-        <div class="grid2">
-            <div class="card">
-                <MultiLineText
-                    lines={interestTitle}
-                    tag="h2"
-                    class="interest-title"
-                />
-                <MultiLineText lines={interestDescription} tag="p" />
-            </div>            
-            <div class="hero-div-interest">
-                <Image
-                    src={interestHero}
-                    alt="Hero Image"
-                    widths={[250, 372]}
-                    sizes="(max-width: 700px) 250px, 372px"
-                    format="avif"
-                    width={372}
-                    height={372}
-                    loading="eager"
-                    decoding="async"
-                />
-            </div>
-        </div>
+<section id="interest" class="relative overflow-hidden bg-base py-28">
+  <div
+    class="aurora right-[-15%] top-[-12%] h-[30rem] w-[30rem] bg-violet/15 animate-aurora-slow"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="aurora bottom-[-20%] left-[-10%] h-[24rem] w-[24rem] bg-accent/10 animate-aurora"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative z-10 mx-auto grid max-w-6xl items-center gap-16 px-5 lg:grid-cols-2 lg:px-8">
+    <div class="reveal">
+      <p class="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+        {t("nav.about")}
+      </p>
+      <MultiLineText
+        lines={interestTitle}
+        tag="h2"
+        class="mt-5 font-display text-4xl font-bold leading-[1.08] tracking-tight text-fg sm:text-5xl"
+      />
+      <MultiLineText
+        lines={interestDescription}
+        tag="p"
+        class="mt-7 max-w-lg text-lg leading-relaxed text-muted"
+      />
+      <ul class="mt-9 flex flex-wrap gap-2.5">
+        {stack.map((item) => (
+          <li class="rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 font-mono text-xs text-muted">
+            {item}
+          </li>
+        ))}
+      </ul>
     </div>
+
+    <div class="reveal relative" style="--reveal-delay:140ms">
+      <div
+        class="absolute -inset-5 rounded-[2rem] bg-gradient-to-tr from-accent/25 via-transparent to-violet/25 blur-2xl"
+        aria-hidden="true"
+      ></div>
+      <img
+        src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80"
+        alt=""
+        loading="lazy"
+        class="relative aspect-[4/3] w-full rounded-2xl border border-white/10 object-cover shadow-[0_30px_80px_-30px_rgba(0,0,0,0.9)]"
+      />
+      <div
+        class="absolute -bottom-6 left-6 flex items-center gap-3 rounded-xl border border-white/10 bg-ink/85 px-4 py-3 shadow-2xl backdrop-blur-xl"
+      >
+        <span class="relative flex h-2 w-2" aria-hidden="true">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-accent"></span>
+        </span>
+        <p class="text-sm font-medium text-fg">{t("desire.hosted.title")}</p>
+      </div>
+    </div>
+  </div>
 </section>

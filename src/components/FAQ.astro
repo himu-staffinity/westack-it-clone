@@ -11,24 +11,46 @@ export interface FAQProps {
 const { items } = Astro.props;
 ---
 
-<section class="faq" itemscope itemtype="https://schema.org/FAQPage">
-  <h3>FAQ</h3>
-  <ul>
+<section class="faq mx-auto mt-16 max-w-3xl" itemscope itemtype="https://schema.org/FAQPage">
+  <h3 class="font-display text-2xl font-semibold text-fg">FAQ</h3>
+  <ul class="mt-6 space-y-3">
     {items.map((item: FAQItem, index: number) => (
       <li
-        class={`faq-item ${index === 0 ? "open" : ""}`}
+        class={`faq-item overflow-hidden rounded-xl border transition-colors duration-300 ${
+          index === 0
+            ? "open border-accent/30 bg-surface"
+            : "border-white/10 bg-surface/60"
+        }`}
         itemscope
         itemprop="mainEntity"
         itemtype="https://schema.org/Question"
       >
         <button
-          class="faq-question"
+          class="faq-question flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
           type="button"
           aria-expanded={index === 0 ? "true" : "false"}
           aria-controls={`faq-answer-${index}`}
           itemprop="name"
         >
-          {item.name}
+          <span class="font-medium leading-snug text-fg transition-colors duration-300 hover:text-accent-soft">
+            {item.name}
+          </span>
+          <span
+            class="faq-icon flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/10 text-accent"
+            aria-hidden="true"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </span>
         </button>
         <div
           class="faq-answer"
@@ -37,7 +59,12 @@ const { items } = Astro.props;
           itemprop="acceptedAnswer"
           itemtype="https://schema.org/Answer"
         >
-          <p itemprop="text">{item.acceptedAnswer}</p>
+          <p
+            class="px-5 pb-5 text-sm leading-relaxed text-muted"
+            itemprop="text"
+          >
+            {item.acceptedAnswer}
+          </p>
         </div>
       </li>
     ))}

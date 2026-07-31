@@ -1,11 +1,15 @@
-import { SITE_URL } from '../config';
+import { SITE_URL } from '../config'; // adjust path as needed
+
 
 export async function GET() {
-  const body = `User-agent: *
+    const robotsTxt = `User-agent: *
 Disallow:
+
 Sitemap: ${SITE_URL}/sitemap-index.xml`;
 
-  return new Response(body, {
-    headers: { 'Content-Type': 'text/plain' }
-  });
-}
+    return new Response(robotsTxt, {
+        headers: {
+            'Content-Type': 'text/plain'
+        }
+    });
+} 

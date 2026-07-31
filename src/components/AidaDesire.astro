@@ -1,6 +1,4 @@
 ---
-import { Image } from "astro:assets";
-import desireBg from "../assets/images/backgrounds/desire.webp";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
 import DemoRequest from "./DemoRequest.astro";
 import MultiLineText from "./i18n/MultiLineText.astro";
@@ -8,50 +6,79 @@ import MultiLineText from "./i18n/MultiLineText.astro";
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Get structured title data
 const desireTitle = t("desire.title");
+
+const features = [
+  {
+    title: t("desire.hosted.title"),
+    description: t("desire.hosted.description"),
+    icon: '<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="6" rx="1.5"/><rect x="2" y="14" width="20" height="6" rx="1.5"/><path d="M6 7h.01M6 17h.01"/></svg>',
+  },
+  {
+    title: t("desire.infrastructure.title"),
+    description: t("desire.infrastructure.description"),
+    icon: '<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg>',
+  },
+  {
+    title: t("desire.gdpr.title"),
+    description: t("desire.gdpr.description"),
+    icon: '<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3.5v5.2c0 5-3.4 9.6-8 11.3-4.6-1.7-8-6.3-8-11.3V5.5L12 2z"/><path d="M9 12l2 2 4-4"/></svg>',
+  },
+];
 ---
 
-<section id="desire">
-    <Image
-        src={desireBg}
-        alt="Desire Background"
-        class="background-image"
-        format="avif"
-        widths={[700, 1100, 1366, 1650]}
-        sizes="100vw"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        height={1173}
-        width={1366}
+<section id="desire" class="relative overflow-hidden py-28">
+  <img
+    src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2000&q=80"
+    alt=""
+    loading="lazy"
+    class="absolute inset-0 h-full w-full object-cover opacity-25"
+  />
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-ink via-ink/70 to-ink"
+    aria-hidden="true"
+  ></div>
+  <div class="bg-grid absolute inset-0 opacity-50" aria-hidden="true"></div>
+
+  <div class="relative z-10 mx-auto max-w-6xl px-5 text-center lg:px-8">
+    <p class="reveal font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+      WeStack
+    </p>
+    <MultiLineText
+      lines={desireTitle}
+      tag="h2"
+      class="reveal mt-5 font-display text-4xl font-bold tracking-tight text-fg sm:text-5xl"
     />
-    <div class="inner grid2">
-        <MultiLineText lines={desireTitle} tag="h2" class="desire-title" />
-        <div class="card">
-            <div>
-                <h2 class="desire-subtitle">{t("desire.hosted.title")}</h2>
-                <p>{t("desire.hosted.description")}</p>
-            </div>
-            <div>
-                <h2 class="desire-subtitle">
-                    {t("desire.infrastructure.title")}
-                </h2>
-                <p>{t("desire.infrastructure.description")}</p>
-            </div>
-            <div>
-                <h2 class="desire-subtitle">{t("desire.gdpr.title")}</h2>
-                <p>{t("desire.gdpr.description")}</p>
-            </div>
+
+    <div class="mt-14 grid gap-5 text-left sm:grid-cols-3">
+      {features.map((feature, i) => (
+        <div
+          class="group reveal rounded-2xl border border-white/10 bg-surface/70 p-7 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:bg-surface"
+          style={`--reveal-delay:${i * 100}ms`}
+        >
+          <div
+            class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-raised text-accent transition-transform duration-300 group-hover:scale-110"
+            set:html={feature.icon}
+          ></div>
+          <h3 class="font-display text-lg font-semibold text-fg">
+            {feature.title}
+          </h3>
+          <p class="mt-2.5 text-sm leading-relaxed text-muted">
+            {feature.description}
+          </p>
         </div>
+      ))}
     </div>
 
-    <DemoRequest
+    <div class="reveal mt-16" style="--reveal-delay:300ms">
+      <DemoRequest
         product={{
-            slug: "desire-section",
-            title: t("demo.contactForm.title"),
-            description: t("demo.contactForm.description"),
+          slug: "desire-section",
+          title: t("demo.contactForm.title"),
+          description: t("demo.contactForm.description"),
         }}
         buttonTitle={t("demo.contact")}
-    />
+      />
+    </div>
+  </div>
 </section>

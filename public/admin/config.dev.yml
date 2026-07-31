@@ -1,8 +1,8 @@
 backend:
   name: github
   repo: himu-staffinity/westack-it-clone
-  branch: dev
-  site_domain: http://localhost:4321
+  branch: main
+  site_domain: http://localhost:8080
   base_url: http://localhost:8080
   auth_endpoint: /api/auth/
 

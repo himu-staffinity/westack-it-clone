@@ -166,6 +166,7 @@ async function handleGithubCallback(request) {
 
 async function handleGithubAuth(request) {
   const client_id = getEnv('GITHUB_CLIENT_ID');
+  console.log(client_id);
   try {
     const url = new URL(request.url);
     const redirectUrl = new URL('https://github.com/login/oauth/authorize');

@@ -14,8 +14,18 @@ const { Content } = await privacy.render();
 ---
 
 <Layout title={privacy.data.title}>
-  <article class="privacy">
-    <h1 class="privacy-heading">{privacy.data.title}</h1>
-    <Content />
-  </article>
+  <div class="relative overflow-hidden">
+    <div
+      class="aurora right-[-15%] top-[-10%] h-[26rem] w-[26rem] bg-accent/10 animate-aurora-slow"
+      aria-hidden="true"
+    ></div>
+    <article class="privacy relative mx-auto max-w-3xl px-5 pb-28 pt-32 lg:px-8 lg:pt-36">
+      <h1 class="reveal font-display text-4xl font-bold tracking-tight text-fg sm:text-5xl">
+        {privacy.data.title}
+      </h1>
+      <div class="prose-dark reveal mt-10">
+        <Content />
+      </div>
+    </article>
+  </div>
 </Layout>

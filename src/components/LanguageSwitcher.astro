@@ -5,7 +5,7 @@ const lang = getLangFromUrl(Astro.url);
 const currentPath = Astro.url.pathname;
 ---
 
-<div class="flex items-center rounded-full border border-ink/15 bg-surface p-0.5 font-mono text-[11px] tracking-widest">
+<div class="flex items-center rounded-full border border-fg/15 bg-surface/60 p-0.5 font-mono text-[11px] tracking-widest backdrop-blur-md">
   {
     Object.entries(languages).map(([locale, label]) => (
       <a
@@ -15,8 +15,8 @@ const currentPath = Astro.url.pathname;
         )}
         class={
           locale === lang
-            ? "rounded-full bg-ink px-2.5 py-1 font-semibold text-cream transition-colors duration-300"
-            : "rounded-full px-2.5 py-1 text-muted transition-colors duration-300 hover:text-ink"
+            ? "rounded-full bg-accent px-2.5 py-1 font-semibold text-ink transition-colors duration-300"
+            : "rounded-full px-2.5 py-1 text-muted transition-colors duration-300 hover:text-fg"
         }
         aria-label={`Switch to ${label}`}
         aria-current={locale === lang ? "true" : undefined}

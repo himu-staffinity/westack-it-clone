@@ -22,7 +22,7 @@ const context = t("demo.context") as string[];
   <form
     id="demo-form"
     style="display:none;"
-    class="mt-8 flex w-full max-w-xl flex-col items-center gap-5 rounded-card border border-ink/10 bg-surface p-8 shadow-lift"
+    class="mt-8 flex w-full max-w-xl flex-col items-center gap-5 rounded-card border border-fg/15 bg-surface/60 p-8 shadow-lift backdrop-blur-md"
   >
     <div class="space-y-2 text-center">
       {context.map((line: string) => (
@@ -35,7 +35,7 @@ const context = t("demo.context") as string[];
         id="demo-email"
         placeholder={t("demo.email.placeholder")}
         required
-        class="w-full flex-1 rounded-full border border-ink/25 bg-white/60 px-5 py-3 text-sm text-fg outline-none transition placeholder:text-faint focus:border-accent focus:ring-2 focus:ring-accent/25"
+        class="w-full flex-1 rounded-full border border-fg/20 bg-ink/60 px-5 py-3 font-mono text-sm text-fg outline-none transition placeholder:text-faint focus:border-accent focus:ring-2 focus:ring-accent/30"
       />
       <button type="submit" class="btn-primary shrink-0">
         {t("demo.submit")}
@@ -46,7 +46,7 @@ const context = t("demo.context") as string[];
         {t("demo.approval")}{" "}
         <a
           href={lang === "de" ? "/privacy-policy/" : "/en/privacy-policy/"}
-          class="text-accent underline decoration-accent/40 underline-offset-2 transition-colors hover:text-ink"
+          class="text-accent underline decoration-accent/40 underline-offset-2 transition-colors hover:text-fg"
         >
           {t("footer.privacy")}
         </a>
@@ -54,12 +54,12 @@ const context = t("demo.context") as string[];
     </div>
   </form>
 
-  <div id="demo-error" class="demo-error mt-4 font-mono text-xs text-red-700">
+  <div id="demo-error" class="demo-error mt-4 font-mono text-xs text-red-400">
     {t("demo.error.email")}
   </div>
   <div
     id="demo-server-error"
-    class="demo-error mt-4 font-mono text-xs text-red-700"
+    class="demo-error mt-4 font-mono text-xs text-red-400"
     style="display:none;"
   >
     {t("demo.error.server")}

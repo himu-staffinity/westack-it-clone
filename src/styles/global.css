@@ -2,47 +2,51 @@
 
 /* ------------------------------------------------------------------ */
 /*  WeStack — design tokens                                            */
-/*  Warm editorial premium. Ivory paper, espresso ink, muted gold.    */
-/*  Light theme by design: no dark variants, no glass, no glow.       */
-/*  See DESIGN.md for the full rationale.                             */
+/*  "Sovereign Signal" — dark cinematic infrastructure.                */
+/*  Obsidian grounds, phosphor cyan signal, engineering type,          */
+/*  GSAP + Lenis motion, Three.js hero. See DESIGN.md.                 */
 /* ------------------------------------------------------------------ */
 @theme {
   /* Grounds */
-  --color-paper: #faf6ec; /* page background — warm ivory */
-  --color-base: #f2ebdd; /* alternating section ground — warm sand */
-  --color-surface: #fffdf6; /* cards / plates / wells — near-white */
-  --color-raised: #ece2cd; /* inset icon wells, tinted panels */
+  --color-paper: #07090e; /* page ground — warm obsidian night */
+  --color-base: #0b0f18; /* alternating section ground (lifted) */
+  --color-surface: #111624; /* cards / plates / wells (glass) */
+  --color-raised: #1a2233; /* elevated surfaces, icon wells */
+  --color-ink: #04060b; /* deepest night — preloader, solid header */
 
-  /* Ink */
-  --color-ink: #1f1810; /* deepest espresso — buttons, active pill, logo */
-  --color-fg: #241d13; /* primary text */
-  --color-muted: #5f5340; /* secondary text */
-  --color-faint: #7a6c52; /* tertiary text / labels */
+  /* Text */
+  --color-fg: #eef2f8; /* primary text — cold silver-white */
+  --color-muted: #9aa7be; /* secondary text */
+  --color-faint: #6b7a96; /* tertiary text / labels */
 
-  /* Warm accents */
-  --color-accent: #8a6327; /* bronze-gold — eyebrows, links, CTA */
-  --color-accent-soft: #c9a05c; /* light gold — tints only, not text */
-  --color-violet: #b06a3f; /* terracotta — secondary warm accent */
-  --color-cream: #f5eedd; /* text on dark fills */
+  /* Signal accents */
+  --color-accent: #48e5ff; /* phosphor cyan — links, borders, CTA */
+  --color-accent-soft: #a3f3ff; /* light cyan — tints, gradients */
+  --color-violet: #8b7cff; /* electric violet — gradient partner */
+  --color-amber: #ffb46b; /* warm human accent — small highlights */
+  --color-cream: #f4f7fc; /* text on cyan fills */
 
   /* Type */
-  --font-display: "Fraunces", "Georgia", "Times New Roman", ui-serif, serif;
-  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Space Mono", ui-monospace, "SF Mono", "Menlo", monospace;
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Menlo", monospace;
 
-  /* Radii */
-  --radius-card: 1rem;
-  --radius-well: 0.75rem;
+  /* Radii — squared-sharp cards, pill controls */
+  --radius-card: 0.75rem;
+  --radius-well: 0.5rem;
 
-  /* Warm ink shadows (never colored) */
-  --shadow-card: 0 1px 2px rgba(31, 24, 16, 0.05),
-    0 10px 28px -18px rgba(31, 24, 16, 0.25);
-  --shadow-lift: 0 24px 55px -28px rgba(31, 24, 16, 0.4);
-  --shadow-plate: 0 30px 60px -30px rgba(31, 24, 16, 0.45);
+  /* Shadows — night depth + one reserved cyan glow */
+  --shadow-card: inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 20px 50px -25px rgba(0, 0, 0, 0.65);
+  --shadow-lift: 0 40px 80px -30px rgba(0, 0, 0, 0.75);
+  --shadow-glow: 0 0 0 1px rgba(72, 229, 255, 0.35),
+    0 20px 60px -20px rgba(72, 229, 255, 0.35);
 
   /* Motion */
   --animate-marquee: marquee 70s linear infinite;
-  --animate-hero-pan: hero-pan 26s ease-in-out infinite alternate;
+  --animate-aurora: aurora 18s ease-in-out infinite alternate;
+  --animate-aurora-slow: aurora 30s ease-in-out infinite alternate-reverse;
+  --animate-float: float 7s ease-in-out infinite;
 
   @keyframes marquee {
     to {
@@ -50,12 +54,28 @@
     }
   }
 
-  @keyframes hero-pan {
-    from {
-      transform: scale(1.01) translate3d(0, 0, 0);
+  @keyframes aurora {
+    0% {
+      transform: translate3d(-8%, -4%, 0) scale(1) rotate(0deg);
+      opacity: 0.5;
     }
-    to {
-      transform: scale(1.07) translate3d(-1.5%, 0.75%, 0);
+    50% {
+      transform: translate3d(6%, 8%, 0) scale(1.25) rotate(18deg);
+      opacity: 0.85;
+    }
+    100% {
+      transform: translate3d(-4%, 2%, 0) scale(1.05) rotate(-12deg);
+      opacity: 0.55;
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
     }
   }
 }
@@ -65,11 +85,11 @@
 /* ------------------------------------------------------------------ */
 @layer base {
   :root {
-    color-scheme: light;
+    color-scheme: dark;
   }
 
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     background-color: var(--color-paper);
   }
 
@@ -83,7 +103,7 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--color-accent) 30%, transparent);
+    background: color-mix(in oklab, var(--color-accent) 35%, transparent);
     color: var(--color-ink);
   }
 
@@ -104,16 +124,49 @@
     overflow: hidden;
   }
 
-  /* Paper grain overlay for a tactile, non-flat finish.
-     pointer-events: none so it never intercepts interaction. */
+  /* Lenis smooth-scroll requirements */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body.no-cursor,
+  body.no-cursor * {
+    cursor: none !important;
+  }
+
+  /* Film grain over everything — tactile, non-flat, pointer-events none */
   body::after {
     content: "";
     position: fixed;
     inset: 0;
-    z-index: 80;
+    z-index: 90;
     pointer-events: none;
-    opacity: 0.05;
+    opacity: 0.04;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Cinema vignette — soft darkness at the edges */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 55%,
+      rgba(4, 6, 11, 0.55) 100%
+    );
   }
 }
 
@@ -121,52 +174,57 @@
 /*  Components / bespoke effects                                       */
 /* ------------------------------------------------------------------ */
 @layer components {
-  /* Faint editorial layout grid (hairline, warm ink) */
-  .bg-ruled {
+  /* Faint technical grid (hairline, light ink) */
+  .bg-grid {
     background-image: linear-gradient(
         to right,
-        rgba(36, 29, 19, 0.035) 1px,
+        rgba(238, 242, 248, 0.035) 1px,
         transparent 1px
       ),
-      linear-gradient(to bottom, rgba(36, 29, 19, 0.035) 1px, transparent 1px);
-    background-size: 64px 64px;
+      linear-gradient(to bottom, rgba(238, 242, 248, 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
   }
 
-  /* Buttons — pill, gold & espresso. No glow. */
+  /* Aurora blob — blurred colour wash, very subtle in the dark */
+  .aurora {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(80px);
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  /* Buttons — pill, magnetic, signal cyan. */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     border-radius: 9999px;
-    padding: 0.72rem 1.75rem;
-    font-size: 0.875rem;
+    padding: 0.78rem 1.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
     font-weight: 600;
-    letter-spacing: 0.01em;
-    color: var(--color-cream);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink);
     background-color: var(--color-accent);
-    border: 1px solid color-mix(in oklab, var(--color-ink) 35%, transparent);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.18),
-      var(--shadow-card);
+    border: 1px solid transparent;
+    box-shadow: var(--shadow-card);
     transition:
-      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-      background-color 0.3s ease,
-      border-color 0.3s ease,
-      box-shadow 0.3s ease;
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s ease,
+      background-color 0.35s ease;
   }
   .btn-primary:hover {
     transform: translateY(-2px);
-    background-color: #7c581f; /* deepened bronze on hover */
-    border-color: var(--color-ink);
-    box-shadow: var(--shadow-lift);
+    box-shadow: var(--shadow-glow);
   }
   .btn-primary:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.98);
   }
   .btn-primary:focus-visible {
-    /* espresso ring so focus is visible on the gold fill */
-    outline-color: var(--color-ink);
+    outline-color: var(--color-fg);
   }
 
   .btn-ghost {
@@ -175,34 +233,41 @@
     justify-content: center;
     gap: 0.5rem;
     border-radius: 9999px;
-    padding: 0.72rem 1.75rem;
-    font-size: 0.875rem;
+    padding: 0.78rem 1.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
     font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: var(--color-fg);
-    border: 1px solid color-mix(in oklab, var(--color-ink) 35%, transparent);
+    border: 1px solid rgba(238, 242, 248, 0.18);
     background: transparent;
     transition:
-      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 0.3s ease,
-      background-color 0.3s ease,
-      color 0.3s ease;
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.35s ease,
+      background-color 0.35s ease,
+      color 0.35s ease;
   }
   .btn-ghost:hover {
     transform: translateY(-2px);
     border-color: var(--color-accent);
-    background-color: color-mix(in oklab, var(--color-accent) 8%, transparent);
+    background-color: color-mix(in oklab, var(--color-accent) 10%, transparent);
     color: var(--color-accent);
   }
   .btn-ghost:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.98);
   }
 
-  /* Nav links with animated gold underline */
+  /* Nav links — mono, uppercase, cyan underline slides in */
   .nav-link {
     position: relative;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
+    padding: 0.4rem 0.1rem;
+    margin: 0 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
     font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--color-muted);
     transition: color 0.3s ease;
   }
@@ -212,26 +277,27 @@
   .nav-link::after {
     content: "";
     position: absolute;
-    left: 0.75rem;
+    left: 0;
     right: 100%;
-    bottom: 0.15rem;
+    bottom: 0;
     height: 1px;
     background: var(--color-accent);
     transition: right 0.3s ease;
   }
   .nav-link:hover::after,
   .nav-link:focus-visible::after {
-    right: 0.75rem;
+    right: 0;
   }
 
   /* Header: solidifies once the page is scrolled (JS toggles .scrolled) */
   header.scrolled {
-    background-color: rgba(250, 246, 236, 0.96) !important;
-    border-color: rgba(36, 29, 19, 0.12) !important;
-    box-shadow: 0 10px 30px -18px rgba(31, 24, 16, 0.35);
+    background-color: rgba(4, 6, 11, 0.72) !important;
+    border-color: rgba(238, 242, 248, 0.1) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
   }
 
-  /* Mobile menu — full-screen ivory sheet (JS toggles .show) */
+  /* Mobile menu — full-screen ink sheet (JS toggles .show) */
   @media (max-width: 1023px) {
     .nav-links {
       position: fixed;
@@ -241,15 +307,15 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1.75rem;
-      background: rgba(250, 246, 236, 0.98);
-      backdrop-filter: blur(12px);
+      gap: 2rem;
+      background: rgba(7, 9, 14, 0.96);
+      backdrop-filter: blur(16px);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
       transition:
-        opacity 0.3s ease,
-        visibility 0.3s ease;
+        opacity 0.4s ease,
+        visibility 0.4s ease;
     }
     .nav-links.show {
       opacity: 1;
@@ -258,13 +324,19 @@
     }
     .nav-link {
       font-family: var(--font-display);
-      font-size: 1.9rem;
-      font-weight: 500;
-      letter-spacing: -0.01em;
+      font-size: clamp(2rem, 9vw, 3rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      text-transform: none;
       color: var(--color-fg);
+      margin: 0;
+      padding: 0.25rem 0;
     }
     .nav-link:hover {
       color: var(--color-accent);
+    }
+    .nav-link::after {
+      bottom: 0.15rem;
     }
   }
 
@@ -279,7 +351,7 @@
     position: absolute;
     left: 0;
     width: 100%;
-    height: 2px;
+    height: 1.5px;
     border-radius: 2px;
     background: currentColor;
     transition:
@@ -306,42 +378,76 @@
     display: flex;
     width: max-content;
     animation: var(--animate-marquee);
+    will-change: transform;
   }
   .marquee-track:hover {
     animation-play-state: paused;
   }
 
-  /* Scroll-reveal (JS adds .is-visible) */
+  /* Scroll-reveal — hidden via CSS, animated in by GSAP (.reveal only) */
   .reveal {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(36px);
+    filter: blur(6px);
     transition:
       opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
     transition-delay: var(--reveal-delay, 0ms);
   }
   .reveal.is-visible {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
   }
 
-  /* Multi-line translation blocks (hero title, descriptions, address) */
+  /* Hero entrance elements — GSAP fades them in after preloader */
+  .hero-fade {
+    opacity: 0;
+  }
+
+  /* Multi-line translation blocks */
   .multi-line {
     display: block;
   }
 
-  /* Hero headline: last line gets the warm brand gradient, italic serif */
-  .hero-title .multi-line:last-child {
+  /* Hero headline lines — masked, rise-in (GSAP moves .line-inner) */
+  .mask-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.06em;
+    margin-bottom: -0.06em;
+  }
+  .mask-line > .line-inner {
+    display: block;
+    transform: translateY(112%);
+    will-change: transform;
+  }
+
+  /* Hero headline: last line gets the brand gradient, italic */
+  .hero-gradient {
     font-style: italic;
     color: transparent;
     background: linear-gradient(
       100deg,
       var(--color-accent) 0%,
-      #b98a3e 50%,
+      #7fe3ff 45%,
       var(--color-violet) 115%
     );
     -webkit-background-clip: text;
     background-clip: text;
+  }
+
+  /* Interest statement — word-by-word scroll reveal */
+  .word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+  }
+  .word > span {
+    display: inline-block;
+    transform: translateY(120%);
+    will-change: transform;
   }
 
   /* FAQ accordion */
@@ -365,19 +471,102 @@
     display: block;
   }
 
-  /* Long-form markdown: product detail + privacy policy */
+  /* Custom cursor */
+  .cursor-dot,
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    pointer-events: none;
+    border-radius: 9999px;
+    mix-blend-mode: difference;
+    will-change: transform;
+  }
+  .cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--color-accent);
+  }
+  .cursor-ring {
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--color-accent);
+    transition:
+      width 0.25s ease,
+      height 0.25s ease,
+      opacity 0.25s ease,
+      background-color 0.25s ease;
+  }
+  .cursor-ring.cursor-hover {
+    width: 54px;
+    height: 54px;
+    background-color: color-mix(in oklab, var(--color-accent) 18%, transparent);
+  }
+
+  /* Preloader */
+  .preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2.25rem;
+    background-color: var(--color-ink);
+    color: var(--color-fg);
+  }
+
+  /* Spotlight sheen that follows the pointer across cards */
+  .spotlight {
+    position: relative;
+    overflow: hidden;
+  }
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(
+      320px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(72, 229, 255, 0.1),
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+
+  /* Giant footer wordmark */
+  .giant-word {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 115%;
+    font-size: clamp(4rem, 16vw, 15rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-align: center;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(238, 242, 248, 0.16);
+    user-select: none;
+  }
+
+  /* Long-form markdown: product detail + privacy policy (dark) */
   .prose {
     color: var(--color-muted);
     font-size: 1rem;
-    line-height: 1.75;
+    line-height: 1.8;
   }
   .prose > :first-child {
     margin-top: 0;
   }
   .prose h2 {
     font-family: var(--font-display);
-    font-size: 1.6rem;
-    font-weight: 500;
+    font-size: 1.65rem;
+    font-weight: 600;
     letter-spacing: -0.01em;
     color: var(--color-fg);
     margin: 3rem 0 1rem;
@@ -385,7 +574,7 @@
   .prose h3 {
     font-family: var(--font-display);
     font-size: 1.25rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--color-fg);
     margin: 2.5rem 0 0.75rem;
   }
@@ -414,6 +603,7 @@
     height: 0.375rem;
     border-radius: 9999px;
     background: var(--color-accent);
+    box-shadow: 0 0 12px rgba(72, 229, 255, 0.6);
   }
   .prose ol {
     list-style: decimal;
@@ -438,7 +628,7 @@
   }
   .prose hr {
     border: none;
-    border-top: 1px solid color-mix(in oklab, var(--color-ink) 12%, transparent);
+    border-top: 1px solid rgba(238, 242, 248, 0.12);
     margin: 2.5rem 0;
   }
 }
@@ -450,10 +640,17 @@
   html {
     scroll-behavior: auto;
   }
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
+  .reveal,
+  .line-inner,
+  .word > span,
+  .hero-fade {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+  .preloader {
+    display: none;
   }
   *,
   *::before,

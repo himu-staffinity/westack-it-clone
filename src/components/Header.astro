@@ -21,10 +21,17 @@ const links = [
 
 <header
   id="site-header"
-  class="fixed inset-x-0 top-0 z-50 border-b border-ink/10 bg-paper/85 backdrop-blur-md transition-colors duration-300"
+  class="fixed inset-x-0 top-0 z-50 border-b border-transparent transition-colors duration-300"
 >
-  <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 lg:px-8" aria-label="WeStack">
-    <a href={lang === "en" ? "/en/" : "/"} class="group flex shrink-0 items-center gap-2.5" aria-label="WeStack">
+  <nav
+    class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8"
+    aria-label="WeStack"
+  >
+    <a
+      href={lang === "en" ? "/en/" : "/"}
+      class="group flex shrink-0 items-center gap-2.5"
+      aria-label="WeStack"
+    >
       <Image
         src={logo}
         alt=""
@@ -32,12 +39,12 @@ const links = [
         height={32}
         class="h-8 w-8 transition-transform duration-300 group-hover:scale-110"
       />
-      <span class="font-display text-lg font-medium tracking-tight text-fg">
+      <span class="font-display text-lg font-semibold tracking-tight text-fg">
         WeStack
       </span>
     </a>
 
-    <ul class="nav-links flex list-none gap-1 lg:ml-auto" id="nav-links">
+    <ul class="nav-links flex list-none items-center gap-1 lg:ml-auto" id="nav-links">
       {links.map((link) => (
         <li>
           <a class="nav-link" href={link.href}>
@@ -45,7 +52,7 @@ const links = [
           </a>
         </li>
       ))}
-      <li class="mt-2 lg:ml-3 lg:mt-0">
+      <li class="ml-4 hidden lg:block">
         <LanguageSwitcher />
       </li>
     </ul>
@@ -53,7 +60,7 @@ const links = [
     <div class="relative z-50 flex items-center gap-3 lg:hidden">
       <a
         href={getLocalizedPath(Astro.url.pathname, lang === "de" ? "en" : "de")}
-        class="flex h-9 w-9 items-center justify-center rounded-full border border-ink/15 bg-surface text-muted transition-colors hover:border-accent/50 hover:text-ink"
+        class="flex h-9 w-9 items-center justify-center rounded-full border border-fg/15 bg-surface/60 text-muted backdrop-blur-md transition-colors hover:border-accent/50 hover:text-accent"
         aria-label={lang === "de" ? "Switch to English" : "Switch to German"}
       >
         <Image
@@ -67,7 +74,7 @@ const links = [
       <button
         id="menu-toggle"
         type="button"
-        class="menu-btn flex h-9 w-9 items-center justify-center rounded-full border border-ink/15 bg-surface text-fg transition-colors hover:border-accent/50"
+        class="menu-btn flex h-9 w-9 items-center justify-center rounded-full border border-fg/15 bg-surface/60 text-fg backdrop-blur-md transition-colors hover:border-accent/50"
         aria-expanded="false"
         aria-controls="nav-links"
         aria-label={lang === "de" ? "Menü" : "Menu"}
@@ -82,38 +89,27 @@ const links = [
 </header>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const header = document.getElementById("site-header");
-    if (header) {
-      const onScroll = () => {
-        header.classList.toggle("scrolled", window.scrollY > 12);
-      };
-      onScroll();
-      window.addEventListener("scroll", onScroll, { passive: true });
-    }
+  const toggleBtn = document.getElementById("menu-toggle");
+  const navLinks = document.getElementById("nav-links");
 
-    const toggleBtn = document.getElementById("menu-toggle");
-    const navLinks = document.getElementById("nav-links");
+  if (toggleBtn && navLinks) {
+    const setOpen = (open: boolean) => {
+      navLinks.classList.toggle("show", open);
+      toggleBtn.classList.toggle("open", open);
+      toggleBtn.setAttribute("aria-expanded", String(open));
+      document.body.classList.toggle("no-scroll", open);
+    };
 
-    if (toggleBtn && navLinks) {
-      const setOpen = (open) => {
-        navLinks.classList.toggle("show", open);
-        toggleBtn.classList.toggle("open", open);
-        toggleBtn.setAttribute("aria-expanded", String(open));
-        document.body.classList.toggle("no-scroll", open);
-      };
+    toggleBtn.addEventListener("click", () => {
+      setOpen(!navLinks.classList.contains("show"));
+    });
 
-      toggleBtn.addEventListener("click", () => {
-        setOpen(!navLinks.classList.contains("show"));
-      });
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => setOpen(false));
+    });
 
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => setOpen(false));
-      });
-
-      window.addEventListener("resize", () => {
-        if (window.innerWidth >= 1024) setOpen(false);
-      });
-    }
-  });
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 1024) setOpen(false);
+    });
+  }
 </script>

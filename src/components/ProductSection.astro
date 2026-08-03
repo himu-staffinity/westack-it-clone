@@ -15,22 +15,25 @@ const sortedProducts = products.sort(
 );
 ---
 
-<section id="product" class="relative overflow-hidden bg-paper py-28">
-  <div class="bg-ruled absolute inset-0 opacity-50" aria-hidden="true"></div>
+<section id="product" class="relative overflow-hidden bg-paper py-24 lg:py-32">
+  <div class="bg-grid absolute inset-0 opacity-50" aria-hidden="true"></div>
 
-  <div class="relative z-10 mx-auto max-w-6xl px-5 lg:px-8">
-    <div class="reveal mb-14 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+  <div class="relative z-10 mx-auto max-w-7xl px-5 lg:px-8">
+    <div class="reveal flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
       <div>
         <p class="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
-          {sortedProducts.length} {t("nav.products")}
+          {String(sortedProducts.length).padStart(2, "0")}&nbsp;{t("nav.products")}
         </p>
-        <h2 class="mt-4 font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl">
+        <h2
+          class="mt-4 font-display font-semibold leading-[1.02] tracking-tight text-fg"
+          style="font-size: clamp(2rem, 5vw, 4rem); font-stretch: 112%"
+        >
           {t("products.title")}
         </h2>
       </div>
       <a
         href={lang === "de" ? "/#footer" : "/en/#footer"}
-        class="group inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-accent"
+        class="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-accent"
       >
         {t("footer.contact")}
         <svg
@@ -46,15 +49,12 @@ const sortedProducts = products.sort(
       </a>
     </div>
 
-    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="mt-12 grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
       {
         sortedProducts.map((product, i) => {
-          // Extract the base slug (remove language directory if present)
           const baseSlug = product.slug.includes("/")
             ? product.slug.split("/")[1]
             : product.slug;
-
-          // Generate the correct URL based on current language
           const productUrl =
             lang === "de"
               ? `/products/${baseSlug}/`
@@ -63,60 +63,71 @@ const sortedProducts = products.sort(
           return (
             <a
               href={productUrl}
-              class="group reveal relative flex flex-col overflow-hidden rounded-card border border-ink/10 bg-surface p-6 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/50 hover:shadow-lift"
-              style={`--reveal-delay:${(i % 6) * 70}ms`}
+              class="product-card spotlight group relative flex flex-col overflow-hidden rounded-card border border-fg/10 bg-surface/60 p-6 shadow-card backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-accent/40 hover:shadow-glow"
             >
-              <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-well border border-ink/10 bg-raised/70 p-3 transition-transform duration-300 group-hover:scale-110">
-                <Image
-                  src={product.data.icon}
-                  alt=""
-                  width={64}
-                  height={64}
-                  class="h-full w-full object-contain"
-                />
+              <div class="flex items-start justify-between">
+                <div
+                  class="flex h-14 w-14 items-center justify-center rounded-well border border-fg/10 bg-raised/70 p-3 transition-transform duration-300 group-hover:scale-110"
+                >
+                  <Image
+                    src={product.data.icon}
+                    alt=""
+                    width={56}
+                    height={56}
+                    class="h-full w-full object-contain"
+                  />
+                </div>
+                <span class="font-mono text-xs text-faint">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </div>
-              <h3 class="font-display text-xl font-medium leading-snug text-fg">
+
+              <h3 class="mt-6 font-display text-xl font-semibold leading-snug text-fg">
                 {product.data.title}
               </h3>
               <p class="mt-2.5 line-clamp-3 text-sm leading-relaxed text-muted">
                 {product.data.description}
               </p>
+
               {
                 product.data.tags && product.data.tags.length > 0 && (
                   <div class="mt-5 flex flex-wrap gap-1.5">
                     {product.data.tags.slice(0, 3).map((tag) => (
-                      <span class="rounded-full border border-ink/10 bg-raised/40 px-2.5 py-0.5 font-mono text-[10px] text-faint">
+                      <span class="rounded-full border border-fg/10 bg-raised/40 px-2.5 py-0.5 font-mono text-[10px] text-faint">
                         {tag}
                       </span>
                     ))}
                   </div>
                 )
               }
-              <div class="mt-6 flex items-center justify-between border-t border-ink/10 pt-4">
-                <p class="flex items-baseline gap-1.5">
-                  <span class="font-mono text-[10px] uppercase tracking-wider text-faint">
-                    {t("products.price_offer")}
+
+              <div class="mt-auto pt-6">
+                <div class="flex items-center justify-between border-t border-fg/10 pt-4">
+                  <p class="flex items-baseline gap-1.5">
+                    <span class="font-mono text-[10px] uppercase tracking-wider text-faint">
+                      {t("products.price_offer")}
+                    </span>
+                    <span class="font-display text-lg font-semibold text-fg">
+                      €{product.data.price}
+                    </span>
+                    <span class="text-xs text-faint">
+                      {t("products.price_period")}
+                    </span>
+                  </p>
+                  <span class="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-accent">
+                    {lang === "de" ? "Mehr erfahren" : "Learn more"}
+                    <svg
+                      class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
                   </span>
-                  <span class="font-display text-lg font-semibold text-fg">
-                    €{product.data.price}
-                  </span>
-                  <span class="text-xs text-faint">
-                    {t("products.price_period")}
-                  </span>
-                </p>
-                <span class="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-accent">
-                  {lang === "de" ? "Mehr erfahren" : "Learn more"}
-                  <svg
-                    class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    aria-hidden="true"
-                  >
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </span>
+                </div>
               </div>
             </a>
           );
@@ -124,10 +135,11 @@ const sortedProducts = products.sort(
       }
 
       <div
-        class="reveal flex min-h-[16.5rem] flex-col items-center justify-center rounded-card border border-dashed border-ink/25 p-8 text-center transition-colors duration-300 hover:border-accent/50"
-        style="--reveal-delay:360ms"
+        class="spotlight relative flex flex-col items-center justify-center rounded-card border border-dashed border-fg/20 p-8 text-center transition-colors duration-300 hover:border-accent/40"
       >
-        <div class="flex h-16 w-16 items-center justify-center rounded-well border border-ink/10 bg-raised/40">
+        <div
+          class="flex h-14 w-14 items-center justify-center rounded-well border border-fg/10 bg-raised/40"
+        >
           <Image
             src={import("../assets/images/products/plus.svg")}
             alt=""
@@ -136,7 +148,7 @@ const sortedProducts = products.sort(
             class="h-10 w-10 opacity-70"
           />
         </div>
-        <h3 class="mt-6 font-display text-xl font-medium text-fg">
+        <h3 class="mt-6 font-display text-xl font-semibold text-fg">
           {t("products.more.title")}
         </h3>
         <p class="mt-2 max-w-xs text-sm leading-relaxed text-muted">
@@ -146,3 +158,4 @@ const sortedProducts = products.sort(
     </div>
   </div>
 </section>
+

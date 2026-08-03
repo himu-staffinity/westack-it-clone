@@ -1,59 +1,182 @@
 ---
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
-import MultiLineText from "./i18n/MultiLineText.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const interestTitle = t("interest.title");
-const interestDescription = t("interest.description");
+const statement: string = (t("interest.description") as string[])
+  .map((line: string) => line.trim())
+  .join(" ");
 
 // Grounded technical labels — these mirror actual product names in the portfolio
 const stack = ["Kubernetes", "PostgreSQL", "S3", "Supabase", "n8n", "Nextcloud"];
+
+const metrics = [
+  { value: 23, suffix: "", label: t("interest.metric_products") },
+  { value: 100, suffix: "%", label: t("desire.hosted.title") },
+  { value: 3, suffix: "", label: t("interest.metric_founders") },
+];
 ---
 
-<section id="interest" class="relative overflow-hidden bg-base py-28">
-  <div class="relative z-10 mx-auto grid max-w-6xl items-center gap-16 px-5 lg:grid-cols-2 lg:px-8">
-    <div class="reveal">
+<section id="interest" class="relative overflow-hidden bg-base py-28 lg:py-36">
+  <div class="bg-grid absolute inset-0 opacity-60" aria-hidden="true"></div>
+  <div
+    class="aurora right-[-6%] top-[20%] h-[36vh] w-[36vh] bg-accent/15 animate-aurora-slow"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative z-10 mx-auto grid max-w-7xl items-start gap-16 px-5 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
+    <div>
       <p class="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
         {t("nav.about")}
       </p>
-      <MultiLineText
-        lines={interestTitle}
-        tag="h2"
-        class="mt-5 font-display text-4xl font-medium leading-[1.08] tracking-tight text-fg sm:text-5xl"
-      />
-      <MultiLineText
-        lines={interestDescription}
-        tag="p"
-        class="mt-7 max-w-lg text-lg leading-relaxed text-muted"
-      />
-      <ul class="mt-9 flex flex-wrap gap-2.5">
-        {stack.map((item) => (
-          <li class="rounded-full border border-ink/15 bg-surface px-3.5 py-1.5 font-mono text-xs text-muted">
-            {item}
+      <h2
+        class="mt-5 font-display font-semibold leading-[1.02] tracking-tight text-fg"
+        style="font-size: clamp(2rem, 4.5vw, 3.25rem)"
+      >
+        {lang === "de" ? "Was bieten wir an?" : "What do we offer?"}
+      </h2>
+
+      <p
+        id="interest-statement"
+        class="mt-8 max-w-xl font-display text-2xl font-medium leading-[1.2] tracking-tight text-muted sm:text-[1.7rem]"
+      >
+        {statement}
+      </p>
+
+      <ul class="mt-10 flex flex-wrap gap-2.5">
+        {stack.map((item, i) => (
+          <li
+            class="chip rounded-full border border-fg/15 bg-surface/60 px-3.5 py-1.5 font-mono text-xs text-muted backdrop-blur-md transition-colors hover:border-accent/40 hover:text-accent"
+            style={`--reveal-delay:${i * 60}ms`}
+          >
+            <span class="text-accent">#</span>&nbsp;{item}
           </li>
         ))}
       </ul>
     </div>
 
-    <div class="reveal relative" style="--reveal-delay:140ms">
-      <div
-        class="relative rounded-card border border-ink/15 bg-surface p-2.5 shadow-plate"
-      >
-        <img
-          src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80"
-          alt=""
-          loading="lazy"
-          class="aspect-[4/3] w-full rounded-[calc(1rem-10px)] object-cover"
-        />
+    <div class="relative">
+      <div class="reveal relative" style="--reveal-delay:120ms">
+        <div
+          id="interest-plate"
+          class="relative overflow-hidden rounded-card border border-fg/15 bg-surface/60 shadow-lift backdrop-blur-md"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1400&q=80"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="aspect-[4/3] w-full scale-110 object-cover opacity-80 mix-blend-screen"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-base via-transparent to-transparent"
+            aria-hidden="true"
+          ></div>
+          <div
+            class="absolute bottom-4 left-4 flex items-center gap-2.5 rounded-full border border-fg/15 bg-ink/70 px-4 py-2 font-mono text-[11px] uppercase tracking-widest text-fg backdrop-blur-md"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+            {t("desire.hosted.title")}
+          </div>
+        </div>
       </div>
+
       <div
-        class="absolute -bottom-6 left-6 flex items-center gap-3 rounded-xl border border-ink/15 bg-surface px-4 py-3 shadow-card"
+        class="reveal relative z-10 mt-8 grid grid-cols-3 gap-px overflow-hidden rounded-card border border-fg/15 bg-fg/10 shadow-card backdrop-blur-md"
+        style="--reveal-delay:220ms"
       >
-        <span class="h-2 w-2 rounded-full bg-accent" aria-hidden="true"></span>
-        <p class="text-sm font-medium text-fg">{t("desire.hosted.title")}</p>
+        {metrics.map((m) => (
+          <div class="bg-surface/80 px-4 py-6 text-center">
+            <p class="font-display text-3xl font-semibold text-fg">
+              <span class="metric-count" data-count={m.value}>
+                {m.value}
+              </span>
+              <span class="text-accent">{m.suffix}</span>
+            </p>
+            <p class="mt-1.5 font-mono text-[10px] uppercase tracking-wider text-faint">
+              {m.label}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  import { gsap, ScrollTrigger } from "../scripts/site.js";
+
+  const statement = document.getElementById("interest-statement");
+  if (statement && window.__ws) {
+    const words = window.__ws.splitWords(statement);
+    gsap.fromTo(
+      words,
+      { yPercent: 120 },
+      {
+        yPercent: 0,
+        stagger: 0.05,
+        ease: "none",
+        scrollTrigger: {
+          trigger: statement,
+          start: "top 85%",
+          end: "top 40%",
+          scrub: true,
+        },
+      },
+    );
+  }
+
+  // Metric counters count up on enter
+  document.querySelectorAll<HTMLElement>(".metric-count").forEach((el) => {
+    const target = Number(el.dataset.count || 0);
+    const obj = { value: 0 };
+    gsap.to(obj, {
+      value: target,
+      duration: 1.6,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: el,
+        start: "top 88%",
+        once: true,
+      },
+      onUpdate: () => {
+        el.textContent = String(Math.round(obj.value)).padStart(2, "0");
+      },
+    });
+  });
+
+  // Plate parallax
+  const plate = document.getElementById("interest-plate");
+  if (plate) {
+    gsap.to(plate, {
+      yPercent: -6,
+      ease: "none",
+      scrollTrigger: {
+        trigger: plate,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+      },
+    });
+  }
+
+  // Chips stagger in
+  (gsap.utils.toArray(".chip") as HTMLElement[]).forEach((chip) => {
+    gsap.fromTo(
+      chip,
+      { opacity: 0, y: 14, scale: 0.9 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.5,
+        ease: "power3.out",
+        delay: parseFloat(chip.style.getPropertyValue("--reveal-delay") || "0") / 1000,
+        scrollTrigger: { trigger: chip, start: "top 92%", once: true },
+      },
+    );
+  });
+
+  ScrollTrigger.refresh();
+</script>

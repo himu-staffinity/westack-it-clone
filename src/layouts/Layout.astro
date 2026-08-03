@@ -2,11 +2,12 @@
 import Footer from "../components/Footer.astro";
 import Head from "../components/Head.astro";
 import Header from "../components/Header.astro";
-import { getLangFromUrl } from "../i18n/utils";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
 import "../styles/global.css";
 
 const { canonical } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <!doctype html>
@@ -15,17 +16,55 @@ const lang = getLangFromUrl(Astro.url);
     <Head canonical={canonical} lang={lang} />
     <noscript>
       <style>
-        .reveal {
-          opacity: 1;
-          transform: none;
+        .reveal,
+        .line-inner,
+        .word > span {
+          opacity: 1 !important;
+          transform: none !important;
+          filter: none !important;
+        }
+        .preloader {
+          display: none !important;
+        }
+        body {
+          overflow: auto !important;
         }
       </style>
     </noscript>
   </head>
-  <body class="bg-paper text-fg font-sans antialiased">
+  <body class="no-scroll bg-paper font-sans text-fg antialiased">
+    <div id="preloader" class="preloader" aria-hidden="true">
+      <div
+        class="preloader-fade flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.28em] text-faint"
+      >
+        <span>{t("preloader.label")}</span>
+        <span>WeStack&nbsp;©&nbsp;{new Date().getFullYear()}</span>
+      </div>
+      <div class="flex items-end justify-between gap-6">
+        <span
+          class="preloader-fade font-display text-2xl font-semibold tracking-tight"
+        >
+          WeStack
+        </span>
+        <span
+          id="preloader-count"
+          class="font-mono text-6xl font-medium tabular-nums text-accent sm:text-7xl"
+        >
+          00
+        </span>
+      </div>
+      <div class="preloader-fade h-px w-full bg-fg/10">
+        <div
+          id="preloader-bar"
+          class="h-full w-full origin-left scale-x-0 bg-accent"
+          style="transform: scaleX(0)"
+        ></div>
+      </div>
+    </div>
+
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-cream"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:font-semibold focus:uppercase focus:tracking-wider focus:text-ink"
     >
       {lang === "de" ? "Zum Inhalt springen" : "Skip to content"}
     </a>
@@ -38,35 +77,5 @@ const lang = getLangFromUrl(Astro.url);
 </html>
 
 <script>
-  // Scroll-reveal: adds .is-visible to .reveal elements as they enter
-  // the viewport. Respects prefers-reduced-motion.
-  (function () {
-    var reduced =
-      window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var els = document.querySelectorAll(".reveal");
-
-    if (reduced || !("IntersectionObserver" in window)) {
-      els.forEach(function (el) {
-        el.classList.add("is-visible");
-      });
-      return;
-    }
-
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
-    );
-
-    els.forEach(function (el) {
-      observer.observe(el);
-    });
-  })();
+  import "../scripts/site.js";
 </script>

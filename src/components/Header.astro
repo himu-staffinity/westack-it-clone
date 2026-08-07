@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import logo from "../assets/images/logo.svg";
 import langIcon from "../components/icons/globe.svg";
 import {
   getLangFromUrl,
@@ -32,13 +31,21 @@ const links = [
       class="group flex shrink-0 items-center gap-2.5"
       aria-label="WeStack"
     >
-      <Image
-        src={logo}
-        alt=""
-        width={32}
-        height={32}
-        class="h-8 w-8 transition-transform duration-300 group-hover:scale-110"
-      />
+      <svg
+        viewBox="0 0 240 292"
+        class="h-8 w-auto shrink-0 text-fg transition-transform duration-300 group-hover:scale-110"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="40"
+        stroke-linecap="butt"
+        stroke-linejoin="miter"
+        stroke-miterlimit="12"
+        aria-hidden="true"
+      >
+        <path d="M40 46 L110 116 L224 18" />
+        <path d="M40 110 L110 180 L184 106" />
+        <path d="M6 146 L110 250 L184 176" />
+      </svg>
       <span class="font-display text-lg font-semibold tracking-tight text-fg">
         WeStack
       </span>
@@ -55,9 +62,23 @@ const links = [
       <li class="ml-4 hidden lg:block">
         <LanguageSwitcher />
       </li>
+      <li class="hidden lg:block">
+        <button
+          type="button"
+          id="theme-toggle-desktop"
+          class="theme-toggle flex h-9 w-9 items-center justify-center rounded-full border border-fg/15 bg-surface/60 text-base backdrop-blur-md transition-colors hover:border-accent/50"
+          aria-label={lang === "de" ? "Farbschema wechseln" : "Toggle theme"}
+        ></button>
+      </li>
     </ul>
 
     <div class="relative z-50 flex items-center gap-3 lg:hidden">
+      <button
+        type="button"
+        id="theme-toggle-mobile"
+        class="theme-toggle flex h-9 w-9 items-center justify-center rounded-full border border-fg/15 bg-surface/60 text-base backdrop-blur-md transition-colors hover:border-accent/50"
+        aria-label={lang === "de" ? "Farbschema wechseln" : "Toggle theme"}
+      ></button>
       <a
         href={getLocalizedPath(Astro.url.pathname, lang === "de" ? "en" : "de")}
         class="flex h-9 w-9 items-center justify-center rounded-full border border-fg/15 bg-surface/60 text-muted backdrop-blur-md transition-colors hover:border-accent/50 hover:text-accent"
@@ -91,6 +112,25 @@ const links = [
 <script>
   const toggleBtn = document.getElementById("menu-toggle");
   const navLinks = document.getElementById("nav-links");
+
+  const themeButtons = document.querySelectorAll(".theme-toggle");
+  const isLight = () => document.documentElement.classList.contains("light");
+  const syncThemeButtons = () => {
+    themeButtons.forEach((b) => {
+      b.textContent = isLight() ? "🌙" : "☀️";
+    });
+  };
+  themeButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const light = isLight();
+      document.documentElement.classList.toggle("light", !light);
+      try {
+        localStorage.setItem("theme", !light ? "light" : "dark");
+      } catch (e) {}
+      syncThemeButtons();
+    });
+  });
+  syncThemeButtons();
 
   if (toggleBtn && navLinks) {
     const setOpen = (open: boolean) => {

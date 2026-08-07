@@ -63,17 +63,19 @@ const sortedProducts = products.sort(
           return (
             <a
               href={productUrl}
-              class="product-card spotlight group relative flex flex-col overflow-hidden rounded-card border border-fg/10 bg-surface/60 p-6 shadow-card backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-accent/40 hover:shadow-glow"
+              class="product-card spotlight reveal group relative flex flex-col overflow-hidden rounded-card border border-fg/10 bg-surface/60 p-7 shadow-card backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-accent/40 hover:shadow-glow"
+              style={`--reveal-delay:${(i % 8) * 60}ms`}
+              data-tilt
             >
               <div class="flex items-start justify-between">
                 <div
-                  class="flex h-14 w-14 items-center justify-center rounded-well border border-fg/10 bg-raised/70 p-3 transition-transform duration-300 group-hover:scale-110"
+                  class="mb-5 flex h-11 w-11 items-center justify-center rounded-well border border-fg/10 bg-raised/70"
                 >
                   <Image
                     src={product.data.icon}
                     alt=""
-                    width={56}
-                    height={56}
+                    width={44}
+                    height={44}
                     class="h-full w-full object-contain"
                   />
                 </div>
@@ -82,7 +84,7 @@ const sortedProducts = products.sort(
                 </span>
               </div>
 
-              <h3 class="mt-6 font-display text-xl font-semibold leading-snug text-fg">
+              <h3 class="font-display text-xl font-semibold leading-snug text-fg">
                 {product.data.title}
               </h3>
               <p class="mt-2.5 line-clamp-3 text-sm leading-relaxed text-muted">
@@ -135,7 +137,9 @@ const sortedProducts = products.sort(
       }
 
       <div
-        class="spotlight relative flex flex-col items-center justify-center rounded-card border border-dashed border-fg/20 p-8 text-center transition-colors duration-300 hover:border-accent/40"
+        class="spotlight reveal relative flex flex-col items-center justify-center rounded-card border border-dashed border-fg/20 p-8 text-center transition-colors duration-300 hover:border-accent/40"
+        style="--reveal-delay:360ms"
+        data-tilt
       >
         <div
           class="flex h-14 w-14 items-center justify-center rounded-well border border-fg/10 bg-raised/40"
@@ -158,4 +162,42 @@ const sortedProducts = products.sort(
     </div>
   </div>
 </section>
+
+<script>
+  import { gsap } from "../scripts/site.js";
+
+  const reduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer =
+    window.matchMedia && window.matchMedia("(pointer: fine)").matches;
+
+  if (!reduced && finePointer) {
+    document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((card) => {
+      const strength = 8;
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        card.style.setProperty("--my", `${e.clientY - r.top}px`);
+        gsap.to(card, {
+          rotateY: px * strength,
+          rotateX: -py * strength,
+          transformPerspective: 800,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      });
+      card.addEventListener("mouseleave", () => {
+        gsap.to(card, {
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.7,
+          ease: "elastic.out(1, 0.5)",
+        });
+      });
+    });
+  }
+</script>
 

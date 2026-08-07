@@ -2,12 +2,11 @@
 import Footer from "../components/Footer.astro";
 import Head from "../components/Head.astro";
 import Header from "../components/Header.astro";
-import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { getLangFromUrl } from "../i18n/utils";
 import "../styles/global.css";
 
 const { canonical } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
 ---
 
 <!doctype html>
@@ -23,45 +22,13 @@ const t = useTranslations(lang);
           transform: none !important;
           filter: none !important;
         }
-        .preloader {
-          display: none !important;
-        }
         body {
           overflow: auto !important;
         }
       </style>
     </noscript>
   </head>
-  <body class="no-scroll bg-paper font-sans text-fg antialiased">
-    <div id="preloader" class="preloader" aria-hidden="true">
-      <div
-        class="preloader-fade flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.28em] text-faint"
-      >
-        <span>{t("preloader.label")}</span>
-        <span>WeStack&nbsp;©&nbsp;{new Date().getFullYear()}</span>
-      </div>
-      <div class="flex items-end justify-between gap-6">
-        <span
-          class="preloader-fade font-display text-2xl font-semibold tracking-tight"
-        >
-          WeStack
-        </span>
-        <span
-          id="preloader-count"
-          class="font-mono text-6xl font-medium tabular-nums text-accent sm:text-7xl"
-        >
-          00
-        </span>
-      </div>
-      <div class="preloader-fade h-px w-full bg-fg/10">
-        <div
-          id="preloader-bar"
-          class="h-full w-full origin-left scale-x-0 bg-accent"
-          style="transform: scaleX(0)"
-        ></div>
-      </div>
-    </div>
-
+  <body class="bg-paper font-sans text-fg antialiased">
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:font-semibold focus:uppercase focus:tracking-wider focus:text-ink"

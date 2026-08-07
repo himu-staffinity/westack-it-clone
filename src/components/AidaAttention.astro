@@ -6,8 +6,6 @@ import { getLangFromUrl, useTranslations } from "../i18n/utils";
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const heroTitle: string[] = t("hero.title");
-
 const marqueeProducts = (
   await getCollection("products", ({ data }) => data.lang === lang)
 ).sort((a, b) => (a.data.id || 0) - (b.data.id || 0));
@@ -38,6 +36,12 @@ const marquee = [...marqueeProducts, ...marqueeProducts];
     aria-hidden="true"
   ></canvas>
 
+  <!-- Soft radial veil so the headline always reads over the canvas -->
+  <div
+    class="hero-veil pointer-events-none absolute inset-0 z-[2]"
+    aria-hidden="true"
+  ></div>
+
   <!-- Ambient mono corner markers -->
   <p
     class="hero-fade absolute left-5 top-20 z-10 hidden font-mono text-[10px] uppercase tracking-[0.3em] text-faint lg:left-8 lg:block"
@@ -59,23 +63,16 @@ const marquee = [...marqueeProducts, ...marqueeProducts];
     <p
       class="hero-fade inline-flex items-center gap-2.5 rounded-full border border-fg/15 bg-surface/50 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.22em] text-muted backdrop-blur-md"
     >
-      <span class="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_10px_rgba(72,229,255,0.9)]" aria-hidden="true"></span>
+      <span class="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_10px_var(--badge-glow)]" aria-hidden="true"></span>
       {lang === "de" ? "Verwaltete Open-Source-Infrastruktur" : "Managed Open-Source Infrastructure"}
     </p>
 
-    <h1
-      class="hero-title mt-8 font-display font-semibold leading-[0.98] tracking-tight text-fg"
-      style="font-size: clamp(2.75rem, 8vw, 6.5rem); font-stretch: 112%"
-    >
-      {
-        heroTitle.map((line, i) => (
-          <span
-            class={`mask-line ${i === heroTitle.length - 1 ? "hero-gradient" : ""}`}
-          >
-            <span class="line-inner">{line}</span>
-          </span>
-        ))
-      }
+    <h1 class="hero-title mt-8">
+      <span class="mask-line">
+        <span class="line-inner giant-word"
+          ><span class="hero-word-we">We</span><span class="hero-word-stack">Stack</span></span
+        >
+      </span>
     </h1>
 
     <p
@@ -163,7 +160,7 @@ const marquee = [...marqueeProducts, ...marqueeProducts];
     const fades = document.querySelectorAll(".hero-fade");
 
     gsap.to(lines, {
-      yPercent: 0,
+      y: 0,
       duration: 1.1,
       stagger: 0.09,
       ease: "power4.out",

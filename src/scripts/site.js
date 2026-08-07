@@ -5,7 +5,7 @@ import Lenis from "lenis";
 /* ------------------------------------------------------------------ */
 /*  WeStack global motion engine (single init — guarded).              */
 /*  Lenis smooth scroll + GSAP/ScrollTrigger + cursor + magnetic +     */
-/*  reveals + header state + preloader coordination.                   */
+/*  reveals + header state + hero ready signal.                        */
 /* ------------------------------------------------------------------ */
 
 if (!window.__wsEngine) {
@@ -144,48 +144,9 @@ if (!window.__wsEngine) {
     });
   }
 
-  /* ------------------------- Preloader sequence --------------------- */
-  const preloader = document.getElementById("preloader");
-  const countEl = document.getElementById("preloader-count");
-  const barEl = document.getElementById("preloader-bar");
-
-  const finishPreloader = () => {
-    document.body.classList.remove("no-scroll");
-    window.__wsReady = true;
-    document.dispatchEvent(new CustomEvent("ws:ready"));
-  };
-
-  if (!preloader || reduced) {
-    finishPreloader();
-  } else {
-    const counter = { value: 0 };
-    const tl = gsap.timeline({
-      onComplete: () => {
-        preloader.style.display = "none";
-        finishPreloader();
-      },
-    });
-
-    tl.to(counter, {
-      value: 100,
-      duration: 1.3,
-      ease: "power2.inOut",
-      onUpdate: () => {
-        if (countEl) countEl.textContent = String(Math.round(counter.value)).padStart(2, "0");
-        if (barEl) barEl.style.transform = `scaleX(${counter.value / 100})`;
-      },
-    })
-      .to(
-        preloader.querySelectorAll(".preloader-fade"),
-        { opacity: 0, y: -18, duration: 0.5, ease: "power2.in" },
-        "-=0.2",
-      )
-      .to(
-        preloader,
-        { yPercent: -100, duration: 0.9, ease: "power4.inOut" },
-        "-=0.1",
-      );
-  }
+  /* ------------------------- Hero ready signal --------------------- */
+  window.__wsReady = true;
+  document.dispatchEvent(new CustomEvent("ws:ready"));
 
   /* ---------------------- Word / line mask helpers ------------------ */
   function splitWords(el) {

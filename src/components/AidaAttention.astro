@@ -2,12 +2,9 @@
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
-import MultiLineText from "./i18n/MultiLineText.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const heroTitle = t("hero.title");
 
 const marqueeProducts = (
   await getCollection("products", ({ data }) => data.lang === lang)
@@ -17,62 +14,88 @@ const marqueeProducts = (
 const marquee = [...marqueeProducts, ...marqueeProducts];
 ---
 
-<section id="attention" class="relative flex min-h-svh flex-col overflow-hidden bg-ink">
-  <img
-    src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=2000&q=80"
-    alt=""
-    class="absolute inset-0 h-full w-full object-cover opacity-45"
-    loading="eager"
-    fetchpriority="high"
-  />
+<section
+  id="attention"
+  class="relative flex min-h-svh flex-col overflow-hidden bg-paper"
+>
+  <!-- Static fallback behind the WebGL canvas -->
+  <div class="bg-grid absolute inset-0 opacity-70" aria-hidden="true"></div>
   <div
-    class="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/45 to-ink"
+    class="aurora left-[-10%] top-[8%] h-[45vh] w-[45vh] bg-accent/25 animate-aurora"
     aria-hidden="true"
   ></div>
   <div
-    class="absolute inset-0 bg-gradient-to-r from-ink/60 via-transparent to-ink/60"
+    class="aurora right-[-8%] bottom-[18%] h-[38vh] w-[38vh] bg-violet/20 animate-aurora-slow"
     aria-hidden="true"
   ></div>
-  <div
-    class="aurora left-[-10%] top-[-15%] h-[34rem] w-[34rem] bg-accent/20 animate-aurora"
-    aria-hidden="true"
-  ></div>
-  <div
-    class="aurora right-[-12%] top-[30%] h-[28rem] w-[28rem] bg-violet/15 animate-aurora-slow"
-    aria-hidden="true"
-  ></div>
-  <div class="bg-grid absolute inset-0 opacity-60" aria-hidden="true"></div>
 
-  <div class="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-5 pb-14 pt-36 text-center lg:px-8">
-    <p class="reveal inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.22em] text-muted backdrop-blur">
-      <span class="relative flex h-1.5 w-1.5" aria-hidden="true">
-        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60"></span>
-        <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent"></span>
-      </span>
+  <!-- WebGL hero — the living stack -->
+  <canvas
+    id="hero-canvas"
+    class="absolute inset-0 z-[1] h-full w-full"
+    aria-hidden="true"
+  ></canvas>
+
+  <!-- Soft radial veil so the headline always reads over the canvas -->
+  <div
+    class="hero-veil pointer-events-none absolute inset-0 z-[2]"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Ambient mono corner markers -->
+  <p
+    class="hero-fade absolute left-5 top-20 z-10 hidden font-mono text-[10px] uppercase tracking-[0.3em] text-faint lg:left-8 lg:block"
+    style="writing-mode: vertical-rl"
+    aria-hidden="true"
+  >
+    Managed&nbsp;Open&nbsp;Source&nbsp;Infrastructure&nbsp;//&nbsp;Nürnberg&nbsp;DE
+  </p>
+  <p
+    class="hero-fade absolute right-5 top-20 z-10 hidden font-mono text-[10px] uppercase tracking-[0.3em] text-faint lg:right-8 lg:block"
+    aria-hidden="true"
+  >
+    01&nbsp;/&nbsp;Attention
+  </p>
+
+  <div
+    class="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-5 pb-16 pt-32 text-center lg:px-8"
+  >
+    <p
+      class="hero-fade inline-flex items-center gap-2.5 rounded-full border border-fg/15 bg-surface/50 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.22em] text-muted backdrop-blur-md"
+    >
+      <span class="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_10px_var(--badge-glow)]" aria-hidden="true"></span>
       {lang === "de" ? "Verwaltete Open-Source-Infrastruktur" : "Managed Open-Source Infrastructure"}
     </p>
 
-    <MultiLineText
-      lines={heroTitle}
-      tag="h1"
-      class="hero-title reveal mt-8 font-display text-4xl font-bold leading-[1.04] tracking-tight text-fg sm:text-6xl lg:text-7xl"
-    />
+    <h1 class="hero-title mt-8">
+      <span class="mask-line">
+        <span class="line-inner giant-word"
+          ><span class="hero-word-we">We</span><span class="hero-word-stack">Stack</span></span
+        >
+      </span>
+    </h1>
 
     <p
-      class="reveal mt-7 max-w-xl text-lg leading-relaxed text-muted sm:text-xl"
-      style="--reveal-delay:120ms"
+      class="hero-fade mt-8 max-w-xl text-lg leading-relaxed text-muted sm:text-xl"
     >
       {t("site.description")}
     </p>
 
     <div
-      class="reveal mt-10 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row"
-      style="--reveal-delay:200ms"
+      class="hero-fade mt-10 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row"
     >
-      <a href={lang === "de" ? "/#desire" : "/en/#desire"} class="btn-primary w-full sm:w-auto">
+      <a
+        href={lang === "de" ? "/#desire" : "/en/#desire"}
+        class="btn-primary w-full sm:w-auto"
+        data-magnetic
+      >
         {t("demo.request")}
       </a>
-      <a href={lang === "de" ? "/#product" : "/en/#product"} class="btn-ghost group w-full sm:w-auto">
+      <a
+        href={lang === "de" ? "/#product" : "/en/#product"}
+        class="btn-ghost group w-full sm:w-auto"
+        data-magnetic
+      >
         {t("nav.products")}
         <svg
           class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
@@ -88,28 +111,72 @@ const marquee = [...marqueeProducts, ...marqueeProducts];
     </div>
   </div>
 
-  <div
-    class="reveal relative z-10 border-y border-white/5 bg-ink/50 backdrop-blur-md"
-    style="--reveal-delay:280ms"
-  >
-    <div class="marquee-track items-center py-5" aria-label={t("nav.products")}>
+  <!-- Product marquee band -->
+  <div class="relative z-10 border-y border-fg/10 bg-base/80 backdrop-blur-md">
+    <div class="marquee-track items-center py-4" aria-label={t("nav.products")}>
       {marquee.map((product, i) => (
         <div
-          class="flex shrink-0 items-center gap-3 px-7"
+          class="flex shrink-0 items-center gap-4 px-8"
           aria-hidden={i >= marqueeProducts.length}
         >
           <Image
             src={product.data.icon}
             alt=""
-            width={28}
-            height={28}
-            class="h-7 w-7 object-contain opacity-60"
+            width={24}
+            height={24}
+            class="h-6 w-6 object-contain opacity-60"
           />
-          <span class="whitespace-nowrap font-mono text-xs text-faint">
+          <span class="whitespace-nowrap font-mono text-xs uppercase tracking-widest text-faint">
             {product.data.title}
           </span>
+          <span
+            class="ml-6 h-1.5 w-1.5 rotate-45 bg-accent/70"
+            aria-hidden="true"
+          ></span>
         </div>
       ))}
     </div>
   </div>
 </section>
+
+<script>
+  import { gsap } from "../scripts/site.js";
+  import { initHeroWebGL } from "../scripts/hero-webgl.js";
+
+  let cleanup: (() => void) | null = null;
+  const canvas = document.getElementById("hero-canvas");
+  if (canvas) {
+    initHeroWebGL(canvas).then((fn) => {
+      cleanup = fn;
+    });
+  }
+
+  window.addEventListener("pagehide", () => {
+    if (cleanup) cleanup();
+  });
+
+  const playHeroEntrance = () => {
+    const lines = document.querySelectorAll(".hero-title .line-inner");
+    const fades = document.querySelectorAll(".hero-fade");
+
+    gsap.to(lines, {
+      y: 0,
+      duration: 1.1,
+      stagger: 0.09,
+      ease: "power4.out",
+      delay: 0.05,
+    });
+
+    gsap.to(fades, {
+      opacity: 1,
+      y: 0,
+      duration: 0.9,
+      stagger: 0.08,
+      ease: "power3.out",
+      delay: 0.4,
+    });
+  };
+
+  if (window.__wsReady) playHeroEntrance();
+  else document.addEventListener("ws:ready", playHeroEntrance, { once: true });
+</script>

@@ -23,7 +23,9 @@
             "with the central goal ",
             "of greatly simplifying the lives of developers, administrators, and SMEs. ",
             "And all of this, completely independent here in Germany."
-        ]
+        ],
+        "metric_products": "Products",
+        "metric_founders": "Founders"
     },
     "desire": {
         "title": [
@@ -64,6 +66,9 @@
                 "We'll only use your email to contact you with details about the demo."
         ],
         "approval":"By submitting, you agree to our "
+    },
+    "preloader": {
+        "label": "DE · Managed Open-Source Infrastructure"
     },
     "site": {
         "title": "WeStack",

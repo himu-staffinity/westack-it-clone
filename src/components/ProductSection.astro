@@ -15,26 +15,25 @@ const sortedProducts = products.sort(
 );
 ---
 
-<section id="product" class="relative overflow-hidden bg-base py-28">
-  <div
-    class="aurora left-[-14%] top-[5%] h-[26rem] w-[26rem] bg-accent/10 animate-aurora"
-    aria-hidden="true"
-  ></div>
-  <div class="bg-grid absolute inset-0 opacity-40" aria-hidden="true"></div>
+<section id="product" class="relative overflow-hidden bg-paper py-24 lg:py-32">
+  <div class="bg-grid absolute inset-0 opacity-50" aria-hidden="true"></div>
 
-  <div class="relative z-10 mx-auto max-w-6xl px-5 lg:px-8">
-    <div class="reveal mb-14 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+  <div class="relative z-10 mx-auto max-w-7xl px-5 lg:px-8">
+    <div class="reveal flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
       <div>
         <p class="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
-          {sortedProducts.length} {t("nav.products")}
+          {String(sortedProducts.length).padStart(2, "0")}&nbsp;{t("nav.products")}
         </p>
-        <h2 class="mt-4 font-display text-4xl font-bold tracking-tight text-fg sm:text-5xl">
+        <h2
+          class="mt-4 font-display font-semibold leading-[1.02] tracking-tight text-fg"
+          style="font-size: clamp(2rem, 5vw, 4rem); font-stretch: 112%"
+        >
           {t("products.title")}
         </h2>
       </div>
       <a
         href={lang === "de" ? "/#footer" : "/en/#footer"}
-        class="group inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-accent"
+        class="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-accent"
       >
         {t("footer.contact")}
         <svg
@@ -50,15 +49,12 @@ const sortedProducts = products.sort(
       </a>
     </div>
 
-    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="mt-12 grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
       {
         sortedProducts.map((product, i) => {
-          // Extract the base slug (remove language directory if present)
           const baseSlug = product.slug.includes("/")
             ? product.slug.split("/")[1]
             : product.slug;
-
-          // Generate the correct URL based on current language
           const productUrl =
             lang === "de"
               ? `/products/${baseSlug}/`
@@ -67,64 +63,73 @@ const sortedProducts = products.sort(
           return (
             <a
               href={productUrl}
-              class="group reveal relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-surface/70 p-6 backdrop-blur transition-all duration-300 hover:-translate-y-1.5 hover:border-accent/40 hover:bg-surface hover:shadow-[0_28px_70px_-28px_rgba(63,224,255,0.3)]"
-              style={`--reveal-delay:${(i % 6) * 70}ms`}
+              class="product-card spotlight reveal group relative flex flex-col overflow-hidden rounded-card border border-fg/10 bg-surface/60 p-7 shadow-card backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-accent/40 hover:shadow-glow"
+              style={`--reveal-delay:${(i % 8) * 60}ms`}
+              data-tilt
             >
-              <div
-                class="pointer-events-none absolute -top-14 left-1/2 h-36 w-36 -translate-x-1/2 rounded-full bg-accent/10 blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                aria-hidden="true"
-              ></div>
-              <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-xl border border-white/10 bg-raised/70 p-3 transition-transform duration-300 group-hover:scale-110">
-                <Image
-                  src={product.data.icon}
-                  alt=""
-                  width={64}
-                  height={64}
-                  class="h-full w-full object-contain"
-                />
+              <div class="flex items-start justify-between">
+                <div
+                  class="mb-5 flex h-11 w-11 items-center justify-center rounded-well border border-fg/10 bg-raised/70"
+                >
+                  <Image
+                    src={product.data.icon}
+                    alt=""
+                    width={44}
+                    height={44}
+                    class="h-full w-full object-contain"
+                  />
+                </div>
+                <span class="font-mono text-xs text-faint">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </div>
+
               <h3 class="font-display text-xl font-semibold leading-snug text-fg">
                 {product.data.title}
               </h3>
               <p class="mt-2.5 line-clamp-3 text-sm leading-relaxed text-muted">
                 {product.data.description}
               </p>
+
               {
                 product.data.tags && product.data.tags.length > 0 && (
                   <div class="mt-5 flex flex-wrap gap-1.5">
                     {product.data.tags.slice(0, 3).map((tag) => (
-                      <span class="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 font-mono text-[10px] text-faint">
+                      <span class="rounded-full border border-fg/10 bg-raised/40 px-2.5 py-0.5 font-mono text-[10px] text-faint">
                         {tag}
                       </span>
                     ))}
                   </div>
                 )
               }
-              <div class="mt-6 flex items-center justify-between border-t border-white/5 pt-4">
-                <p class="flex items-baseline gap-1.5">
-                  <span class="font-mono text-[10px] uppercase tracking-wider text-faint">
-                    {t("products.price_offer")}
+
+              <div class="mt-auto pt-6">
+                <div class="flex items-center justify-between border-t border-fg/10 pt-4">
+                  <p class="flex items-baseline gap-1.5">
+                    <span class="font-mono text-[10px] uppercase tracking-wider text-faint">
+                      {t("products.price_offer")}
+                    </span>
+                    <span class="font-display text-lg font-semibold text-fg">
+                      €{product.data.price}
+                    </span>
+                    <span class="text-xs text-faint">
+                      {t("products.price_period")}
+                    </span>
+                  </p>
+                  <span class="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-accent">
+                    {lang === "de" ? "Mehr erfahren" : "Learn more"}
+                    <svg
+                      class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
                   </span>
-                  <span class="font-display text-lg font-semibold text-fg">
-                    €{product.data.price}
-                  </span>
-                  <span class="text-xs text-faint">
-                    {t("products.price_period")}
-                  </span>
-                </p>
-                <span class="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-accent">
-                  {lang === "de" ? "Mehr erfahren" : "Learn more"}
-                  <svg
-                    class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    aria-hidden="true"
-                  >
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </span>
+                </div>
               </div>
             </a>
           );
@@ -132,16 +137,19 @@ const sortedProducts = products.sort(
       }
 
       <div
-        class="reveal flex min-h-[16.5rem] flex-col items-center justify-center rounded-2xl border border-dashed border-white/15 p-8 text-center transition-colors duration-300 hover:border-accent/40"
+        class="spotlight reveal relative flex flex-col items-center justify-center rounded-card border border-dashed border-fg/20 p-8 text-center transition-colors duration-300 hover:border-accent/40"
         style="--reveal-delay:360ms"
+        data-tilt
       >
-        <div class="flex h-16 w-16 items-center justify-center rounded-xl border border-white/10 bg-white/5">
+        <div
+          class="flex h-14 w-14 items-center justify-center rounded-well border border-fg/10 bg-raised/40"
+        >
           <Image
             src={import("../assets/images/products/plus.svg")}
             alt=""
             width={40}
             height={40}
-            class="h-10 w-10 opacity-60"
+            class="h-10 w-10 opacity-70"
           />
         </div>
         <h3 class="mt-6 font-display text-xl font-semibold text-fg">
@@ -154,3 +162,42 @@ const sortedProducts = products.sort(
     </div>
   </div>
 </section>
+
+<script>
+  import { gsap } from "../scripts/site.js";
+
+  const reduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer =
+    window.matchMedia && window.matchMedia("(pointer: fine)").matches;
+
+  if (!reduced && finePointer) {
+    document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((card) => {
+      const strength = 8;
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        card.style.setProperty("--my", `${e.clientY - r.top}px`);
+        gsap.to(card, {
+          rotateY: px * strength,
+          rotateX: -py * strength,
+          transformPerspective: 800,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      });
+      card.addEventListener("mouseleave", () => {
+        gsap.to(card, {
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.7,
+          ease: "elastic.out(1, 0.5)",
+        });
+      });
+    });
+  }
+</script>
+

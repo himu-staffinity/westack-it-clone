@@ -1,63 +1,73 @@
 ---
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
 import DemoRequest from "./DemoRequest.astro";
-import MultiLineText from "./i18n/MultiLineText.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const desireTitle = t("desire.title");
+const desireTitle: string[] = t("desire.title");
 
 const features = [
   {
     title: t("desire.hosted.title"),
     description: t("desire.hosted.description"),
-    icon: '<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="6" rx="1.5"/><rect x="2" y="14" width="20" height="6" rx="1.5"/><path d="M6 7h.01M6 17h.01"/></svg>',
+    icon: '<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="6" rx="1.5"/><rect x="2" y="14" width="20" height="6" rx="1.5"/><path d="M6 7h.01M6 17h.01"/></svg>',
   },
   {
     title: t("desire.infrastructure.title"),
     description: t("desire.infrastructure.description"),
-    icon: '<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg>',
+    icon: '<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg>',
   },
   {
     title: t("desire.gdpr.title"),
     description: t("desire.gdpr.description"),
-    icon: '<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3.5v5.2c0 5-3.4 9.6-8 11.3-4.6-1.7-8-6.3-8-11.3V5.5L12 2z"/><path d="M9 12l2 2 4-4"/></svg>',
+    icon: '<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3.5v5.2c0 5-3.4 9.6-8 11.3-4.6-1.7-8-6.3-8-11.3V5.5L12 2z"/><path d="M9 12l2 2 4-4"/></svg>',
   },
 ];
 ---
 
-<section id="desire" class="relative overflow-hidden py-28">
+<section id="desire" class="relative overflow-hidden bg-base py-28">
   <img
-    src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2000&q=80"
+    src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2000&q=80"
     alt=""
     loading="lazy"
-    class="absolute inset-0 h-full w-full object-cover opacity-25"
+    decoding="async"
+    class="absolute inset-0 h-full w-full object-cover opacity-[0.12] mix-blend-screen"
   />
   <div
-    class="absolute inset-0 bg-gradient-to-b from-ink via-ink/70 to-ink"
+    class="absolute inset-0 bg-gradient-to-b from-base via-base/75 to-base"
     aria-hidden="true"
   ></div>
-  <div class="bg-grid absolute inset-0 opacity-50" aria-hidden="true"></div>
+  <div class="bg-grid absolute inset-0 opacity-40" aria-hidden="true"></div>
+  <div
+    class="aurora left-[15%] top-[10%] h-[38vh] w-[38vh] bg-violet/15 animate-aurora"
+    aria-hidden="true"
+  ></div>
 
-  <div class="relative z-10 mx-auto max-w-6xl px-5 text-center lg:px-8">
+  <div class="relative z-10 mx-auto max-w-7xl px-5 text-center lg:px-8">
     <p class="reveal font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
-      WeStack
+      WeStack&nbsp;—&nbsp;{t("nav.products")}
     </p>
-    <MultiLineText
-      lines={desireTitle}
-      tag="h2"
-      class="reveal mt-5 font-display text-4xl font-bold tracking-tight text-fg sm:text-5xl"
-    />
+    <h2
+      class="reveal mx-auto mt-5 max-w-3xl font-display font-semibold leading-[1.02] tracking-tight text-fg"
+      style="font-size: clamp(2rem, 5vw, 3.75rem); font-stretch: 112%"
+    >
+      {desireTitle.map((line, i) => (
+        <span class={i === desireTitle.length - 1 ? "hero-gradient" : "block"}>
+          {line}
+        </span>
+      ))}
+    </h2>
 
     <div class="mt-14 grid gap-5 text-left sm:grid-cols-3">
       {features.map((feature, i) => (
         <div
-          class="group reveal rounded-2xl border border-white/10 bg-surface/70 p-7 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:bg-surface"
+          class="group spotlight reveal rounded-card border border-fg/10 bg-surface/60 p-7 shadow-card backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-accent/40 hover:shadow-glow"
           style={`--reveal-delay:${i * 100}ms`}
+          data-tilt
         >
           <div
-            class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-raised text-accent transition-transform duration-300 group-hover:scale-110"
+            class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-well border border-fg/10 bg-raised/70 text-accent"
             set:html={feature.icon}
           ></div>
           <h3 class="font-display text-lg font-semibold text-fg">
@@ -82,3 +92,41 @@ const features = [
     </div>
   </div>
 </section>
+
+<script>
+  import { gsap } from "../scripts/site.js";
+
+  const reduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finePointer =
+    window.matchMedia && window.matchMedia("(pointer: fine)").matches;
+
+  if (!reduced && finePointer) {
+    document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((card) => {
+      const strength = 8;
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        card.style.setProperty("--my", `${e.clientY - r.top}px`);
+        gsap.to(card, {
+          rotateY: px * strength,
+          rotateX: -py * strength,
+          transformPerspective: 800,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      });
+      card.addEventListener("mouseleave", () => {
+        gsap.to(card, {
+          rotateY: 0,
+          rotateX: 0,
+          duration: 0.7,
+          ease: "elastic.out(1, 0.5)",
+        });
+      });
+    });
+  }
+</script>

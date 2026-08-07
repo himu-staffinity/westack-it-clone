@@ -28,12 +28,11 @@
   --color-violet: #8b5cf6;
   --color-violet-soft: #a78bfa;
   --color-cream: #faf5ff;
-  --color-amber: #fbbf24;
 
   /* Type */
-  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Menlo", monospace;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, "SF Mono", monospace;
 
   /* Radii */
   --radius-card: 0.75rem;
@@ -56,6 +55,7 @@
   --animate-aurora-slow: aurora 30s ease-in-out infinite alternate-reverse;
   --animate-float: float 7s ease-in-out infinite;
   --animate-pulse-slow: pulse-slow 4s ease-in-out infinite;
+  --animate-gradient: gradient-shift 8s ease infinite;
 
   @keyframes marquee {
     to {
@@ -95,7 +95,24 @@
       opacity: 0.7;
     }
   }
+
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 }
+
+/* ------------------------------------------------------------------ */
+/*  Light mode overrides                                               */
+/* ------------------------------------------------------------------ */
+@variant dark (&:where(.dark, .dark *));
 
 /* ------------------------------------------------------------------ */
 /*  Base                                                               */
@@ -103,8 +120,6 @@
 @layer base {
   :root {
     color-scheme: dark;
-    /* Hero badge dot glow (dark) — deepened in .light below */
-    --badge-glow: rgba(192, 132, 252, 0.9);
   }
 
   html {
@@ -122,10 +137,7 @@
   }
 
   /* Light mode */
-  .light,
-  .light body,
-  .light html {
-    color-scheme: light;
+  .light {
     --color-paper: #faf8ff;
     --color-base: #f4f0fb;
     --color-surface: #ede8f5;
@@ -155,9 +167,10 @@
       0 20px 60px -20px rgba(219, 39, 119, 0.2);
     --shadow-glow-blue: 0 0 0 1px rgba(37, 99, 235, 0.3),
       0 20px 60px -20px rgba(37, 99, 235, 0.2);
+  }
 
-    /* Hero badge dot glow — deeper so it matches the light accent */
-    --badge-glow: rgba(124, 58, 237, 0.85);
+  .light {
+    color-scheme: light;
   }
 
   .light body,
@@ -176,6 +189,7 @@
     outline-offset: 3px;
   }
 
+  /* Scroll margin for fixed headers */
   #attention,
   #interest,
   #product,
@@ -279,7 +293,7 @@
     will-change: transform;
   }
 
-  /* Buttons */
+  /* Buttons — pill, gradient, signal accent */
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -383,7 +397,7 @@
     right: 0;
   }
 
-  /* Header: solidifies on scroll */
+  /* Header: solidifies on scroll (JS toggles .scrolled) */
   header.scrolled {
     background-color: rgba(3, 3, 7, 0.85) !important;
     border-color: rgba(238, 238, 244, 0.1) !important;
@@ -603,55 +617,17 @@
     background-color: color-mix(in oklab, var(--color-accent) 18%, transparent);
   }
 
-  /* Hero title: no text-shadow here — it would bleed through the
-     transparent gradient glyphs of .hero-wordmark. The drop-shadow
-     glow on the wordmark (plus the .hero-veil) keeps the headline
-     readable over the WebGL canvas. */
-
-  /* WeStack wordmark — vivid brand gradient + soft glow, both themes */
-  .hero-wordmark {
-    font-style: italic;
-    color: transparent;
-    background: linear-gradient(
-      100deg,
-      var(--color-accent) 0%,
-      var(--color-magenta) 46%,
-      var(--color-violet) 118%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    filter: drop-shadow(0 0 12px color-mix(in oklab, var(--color-accent) 40%, transparent))
-      drop-shadow(0 0 44px color-mix(in oklab, var(--color-magenta) 30%, transparent));
-  }
-
-  /* Light mode: deeper sweep + a subtler glow so it pops on the
-     near-white paper instead of washing out */
-  .light .hero-wordmark {
-    background: linear-gradient(
-      100deg,
-      var(--color-accent) 0%,
-      var(--color-magenta) 46%,
-      var(--color-blue) 118%
-    );
-    filter: drop-shadow(0 0 10px color-mix(in oklab, var(--color-accent) 26%, transparent))
-      drop-shadow(0 0 30px color-mix(in oklab, var(--color-magenta) 18%, transparent));
-  }
-
-  /* Soft radial veil behind the hero headline */
-  .hero-veil {
-    background: radial-gradient(
-      ellipse 58% 50% at 50% 44%,
-      color-mix(in oklab, var(--color-paper) 55%, transparent) 0%,
-      transparent 72%
-    );
-  }
-
-  .light .hero-veil {
-    background: radial-gradient(
-      ellipse 58% 50% at 50% 44%,
-      color-mix(in oklab, var(--color-paper) 62%, transparent) 0%,
-      transparent 72%
-    );
+  /* Preloader */
+  .preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2.25rem;
+    background-color: var(--color-ink);
+    color: var(--color-fg);
   }
 
   /* Spotlight sheen */
@@ -701,23 +677,6 @@
 
   .light .giant-word {
     -webkit-text-stroke: 1px rgba(26, 21, 40, 0.16);
-  }
-
-  /* Hero variant: slightly smaller than the footer wordmark, with a
-     more visible outline so it reads over the WebGL canvas */
-  .hero-title .giant-word {
-    font-size: clamp(3.5rem, 14vw, 12rem);
-    -webkit-text-stroke: 1.5px rgba(238, 244, 255, 0.55);
-  }
-
-  /* "We" stays outlined; "Stack" is filled with the accent colour */
-  .hero-title .giant-word .hero-word-stack {
-    color: var(--color-accent);
-  }
-
-  /* Light mode: the hero outline swaps white for a dark contrast stroke */
-  .light .hero-title .giant-word {
-    -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-fg) 55%, transparent);
   }
 
   /* Long-form markdown */
@@ -818,6 +777,9 @@
     transform: none !important;
     filter: none !important;
     transition: none !important;
+  }
+  .preloader {
+    display: none;
   }
   *,
   *::before,

@@ -22,7 +22,7 @@ const context = t("demo.context") as string[];
   <form
     id="demo-form"
     style="display:none;"
-    class="mt-8 flex w-full max-w-xl flex-col items-center gap-5 rounded-2xl border border-white/10 bg-surface/80 p-8 backdrop-blur-xl"
+    class="mt-8 flex w-full max-w-xl flex-col items-center gap-5 rounded-card border border-fg/15 bg-surface/60 p-8 shadow-lift backdrop-blur-md"
   >
     <div class="space-y-2 text-center">
       {context.map((line: string) => (
@@ -35,7 +35,7 @@ const context = t("demo.context") as string[];
         id="demo-email"
         placeholder={t("demo.email.placeholder")}
         required
-        class="w-full flex-1 rounded-full border border-white/15 bg-ink/60 px-5 py-3 text-sm text-fg outline-none transition placeholder:text-faint focus:border-accent/60 focus:ring-2 focus:ring-accent/20"
+        class="w-full flex-1 rounded-full border border-fg/20 bg-ink/60 px-5 py-3 font-mono text-sm text-fg outline-none transition placeholder:text-faint focus:border-accent focus:ring-2 focus:ring-accent/30"
       />
       <button type="submit" class="btn-primary shrink-0">
         {t("demo.submit")}
@@ -46,7 +46,7 @@ const context = t("demo.context") as string[];
         {t("demo.approval")}{" "}
         <a
           href={lang === "de" ? "/privacy-policy/" : "/en/privacy-policy/"}
-          class="text-accent underline decoration-accent/40 underline-offset-2 transition-colors hover:text-accent-soft"
+          class="text-accent underline decoration-accent/40 underline-offset-2 transition-colors hover:text-fg"
         >
           {t("footer.privacy")}
         </a>
@@ -67,7 +67,7 @@ const context = t("demo.context") as string[];
   <div
     id="demo-thankyou"
     style="display:none;"
-    class="mt-8 w-full max-w-xl rounded-2xl border border-accent/30 bg-accent/10 px-6 py-5 text-center text-sm text-accent-soft"
+    class="mt-8 w-full max-w-xl rounded-card border border-accent/40 bg-accent/10 px-6 py-5 text-center text-sm text-fg"
   >
     {t("demo.thankyou")}
   </div>

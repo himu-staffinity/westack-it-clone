@@ -23,7 +23,9 @@
             "mit dem zentralen Ziel, ",
             "das Leben von Entwicklern, Administratoren, und KMUs stark zu vereinfachen. ",
             "Und das, komplett unabhängig hier in Deutschland."
-        ]
+        ],
+        "metric_products": "Produkte",
+        "metric_founders": "Gründer"
     },
     "desire": {
         "title": [
@@ -65,6 +67,9 @@
                     "Wir verwenden Ihre E-Mail-Adresse nur, um Sie mit Details zur Demo zu kontaktieren."
                 ],
         "approval": "Mit dem Absenden stimmen Sie unseren "
+    },
+    "preloader": {
+        "label": "DE · Verwaltete Open-Source-Infrastruktur"
     },
     "site": {
         "title": "WeStack",

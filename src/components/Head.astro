@@ -30,7 +30,7 @@ const pageDescription = description || defaultDescription;
 <meta name="robots" content="index,follow" />
 <meta name="author" content={t("site.author")} />
 <meta itemprop="name" content={t("site.title")} />
-<meta name="theme-color" content="#05070d" />
+<meta name="theme-color" content="#06060b" />
 <meta name="color-scheme" content="dark" />
 <meta name="google" content="notranslate" />
 
@@ -38,7 +38,7 @@ const pageDescription = description || defaultDescription;
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
   rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
 />
 
 <link rel="canonical" href={canonical} />
@@ -46,7 +46,7 @@ const pageDescription = description || defaultDescription;
 <link rel="manifest" href="/manifest.json" />
 <link rel="shortcut icon" href="/assets/images/favicon.png" />
 <link rel="shortcut icon" sizes="196x196" href="/assets/images/196x196.png" />
-<link rel="shortcut icon" sizes="512x512" href="/assets/images/512.512.png" />
+<link rel="shortcut icon" sizes="512x512" href="/assets/images/512x512.png" />
 
 <link
   rel="apple-touch-icon"
@@ -64,7 +64,7 @@ const pageDescription = description || defaultDescription;
 <meta name="HandheldFriendly" content="True" />
 <meta name="MobileOptimized" content="320" />
 <meta name="msapplication-TileImage" content="/assets/images/144x144.png" />
-<meta name="msapplication-TileColor" content="#05070d" />
+<meta name="msapplication-TileColor" content="#06060b" />
 <meta property="og:url" content={canonical} />
 <meta property="og:type" content="website" />
 <meta property="og:title" content={pageTitle} />
@@ -87,4 +87,15 @@ const pageDescription = description || defaultDescription;
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={image} />
 <meta name="twitter:site" content="@WeStack" />
-<link href="/rss.xml" type="application/rss+xml" rel="alternate" />
+
+<script is:inline>
+  (function () {
+    try {
+      var stored = localStorage.getItem("theme");
+      var light = stored
+        ? stored === "light"
+        : window.matchMedia("(prefers-color-scheme: light)").matches;
+      document.documentElement.classList.toggle("light", light);
+    } catch (e) {}
+  })();
+</script>

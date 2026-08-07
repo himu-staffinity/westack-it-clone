@@ -16,10 +16,10 @@ const { items } = Astro.props;
   <ul class="mt-6 space-y-3">
     {items.map((item: FAQItem, index: number) => (
       <li
-        class={`faq-item overflow-hidden rounded-xl border transition-colors duration-300 ${
+        class={`faq-item overflow-hidden rounded-card border backdrop-blur-md transition-all duration-300 ${
           index === 0
-            ? "open border-accent/30 bg-surface"
-            : "border-white/10 bg-surface/60"
+            ? "open border-accent/40 bg-surface/70 shadow-card"
+            : "border-fg/10 bg-surface/50"
         }`}
         itemscope
         itemprop="mainEntity"
@@ -32,11 +32,11 @@ const { items } = Astro.props;
           aria-controls={`faq-answer-${index}`}
           itemprop="name"
         >
-          <span class="font-medium leading-snug text-fg transition-colors duration-300 hover:text-accent-soft">
+          <span class="font-medium leading-snug text-fg transition-colors duration-300 hover:text-accent">
             {item.name}
           </span>
           <span
-            class="faq-icon flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/10 text-accent"
+            class="faq-icon flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-fg/15 text-accent"
             aria-hidden="true"
           >
             <svg
@@ -76,7 +76,7 @@ if (typeof window !== "undefined") {
   document.addEventListener("DOMContentLoaded", () => {
     const faqItems = document.querySelectorAll(".faq-item");
     
-    faqItems.forEach((item, index) => {
+    faqItems.forEach((item: Element) => {
     const button = item.querySelector<HTMLButtonElement>(".faq-question");
     const answer = item.querySelector<HTMLDivElement>(".faq-answer");
 
@@ -94,7 +94,7 @@ if (typeof window !== "undefined") {
         item.classList.remove("open");
         button.setAttribute("aria-expanded", "false");
       } else {
-        faqItems.forEach((other) => {
+        faqItems.forEach((other: Element) => {
           const otherAnswer = other.querySelector<HTMLDivElement>(".faq-answer");
           const otherButton = other.querySelector<HTMLButtonElement>(".faq-question");
           if (otherAnswer) otherAnswer.style.maxHeight = "0";
